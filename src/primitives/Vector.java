@@ -11,9 +11,9 @@ public class Vector {
     /**
      * contractor for creating a Vector
      *
-     * @param _x
-     * @param _y
-     * @param _z
+     * @param _x get x for the contractor
+     * @param _y get y for the contractor
+     * @param _z get z for the contractor
      */
     public Vector(Coordinate _x, Coordinate _y, Coordinate _z) throws IllegalArgumentException {
         if (_x.equals(0) && _y.equals(0) && _z.equals(0))
@@ -25,9 +25,9 @@ public class Vector {
     /**
      * contractor double param
      *
-     * @param _x
-     * @param _y
-     * @param _z
+     * @param _x get x for the contractor
+     * @param _y get y for the contractor
+     * @param _z get z for the contractor
      */
     public Vector(double _x, double _y, double _z) {
         if (_x == 0 && _y == 0 && _z == 0)
@@ -39,7 +39,7 @@ public class Vector {
     /**
      * contractor point param
      *
-     * @param other
+     * @param other get point3D for the contractor
      */
     public Vector(Point3D other) {
         if (other.getX().equals(0) && other.getY().equals(0) && other.getZ().equals(0))
@@ -51,7 +51,7 @@ public class Vector {
     /**
      * contractor copy Vector
      *
-     * @param other
+     * @param other get vector for the copy contractor
      */
     public Vector(Vector other) {
         head = new Point3D(other.getHead());
@@ -69,7 +69,7 @@ public class Vector {
     /**
      * Vector vector subtraction
      *
-     * @param other
+     * @param other get vector for the subtract
      * @return Vector
      */
     public Vector subtract(Vector other) {
@@ -81,7 +81,7 @@ public class Vector {
     /**
      * adding vector to vector
      *
-     * @param other
+     * @param other get vector for the adding
      * @return vector
      */
     public Vector add(Vector other) {

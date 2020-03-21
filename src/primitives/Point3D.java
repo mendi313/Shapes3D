@@ -14,9 +14,9 @@ public class Point3D {
     /**
      * contractor for creating a point
      *
-     * @param _x
-     * @param _y
-     * @param _z
+     * @param _x get x for the contractor
+     * @param _y get y for the contractor
+     * @param _z get z for the contractor
      */
     public Point3D(Coordinate _x, Coordinate _y, Coordinate _z) {
         this.x = _x;
@@ -27,9 +27,9 @@ public class Point3D {
     /**
      * contractor double param
      *
-     * @param _x
-     * @param _y
-     * @param _z
+     * @param _x get x for the contractor
+     * @param _y get y for the contractor
+     * @param _z get z for the contractor
      */
     public Point3D(double _x, double _y, double _z) {
         this(new Coordinate(_x), new Coordinate(_y), new Coordinate(_z));
@@ -38,7 +38,7 @@ public class Point3D {
     /**
      * contractor copy point
      *
-     * @param other
+     * @param other get point3D for the contractor
      */
     public Point3D(Point3D other) {
         x = new Coordinate(other.getX());
@@ -76,7 +76,7 @@ public class Point3D {
     /**
      * calculate vector between point to point
      *
-     * @param other
+     * @param other get point3D for the subtract
      * @return Vector
      */
     public Vector subtract(Point3D other) {
@@ -86,7 +86,7 @@ public class Point3D {
     /**
      * adding vector to point
      *
-     * @param other
+     * @param other get point3D for the adding
      * @return Point3D
      */
     public Point3D add(Vector other) {
@@ -97,7 +97,7 @@ public class Point3D {
     /**
      * calculate squared distance between points
      *
-     * @param other
+     * @param other get point3D for the calculate distanceSquared
      * @return double
      */
     public double distanceSquared(Point3D other) {
@@ -110,7 +110,7 @@ public class Point3D {
     /**
      * calculate distance between points
      *
-     * @param other
+     * @param other get point3D for the calculate distance
      * @return double
      */
     public double distance(Point3D other) {

@@ -10,16 +10,17 @@ public class Ray {
     /**
      * contractor for creating a Ray
      *
-     * @param _p0
-     * @param _dir
+     * @param _p0 get point3D for contractor
+     * @param _dir get vector for contractor
      */
     public Ray(Point3D _p0, Vector _dir) {
-        this._dir = _dir;
-        this._p0 = _p0;
+        this._dir = new Vector(_dir.normalize());
+        this._p0 = new Point3D(_p0);
     }
 
     /**
      * getter
+     *
      * @return _p0
      */
     public Point3D get_p0() {
@@ -28,6 +29,7 @@ public class Ray {
 
     /**
      * getter
+     *
      * @return _dir
      */
     public Vector get_dir() {
