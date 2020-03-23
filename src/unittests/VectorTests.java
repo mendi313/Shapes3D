@@ -2,7 +2,7 @@ package unittests;
 
 import static org.junit.Assert.*;
 
-public class VectorTest extends Object {
+public class VectorTests extends Object {
 
     @org.junit.Test
     public void subtract() {

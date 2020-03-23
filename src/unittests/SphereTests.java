@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class CylinderTest extends Object {
+public class SphereTests extends Object {
 
     @Test
     public void getNormal() {

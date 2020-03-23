@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class PolygonTest extends Object {
+public class TriangleTests extends Object {
 
     @Test
     public void getNormal() {

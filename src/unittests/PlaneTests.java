@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class PlaneTest extends Object {
+public class PlaneTests extends Object {
 
     @Test
     public void getNormal() {
