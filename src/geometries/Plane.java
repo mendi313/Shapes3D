@@ -43,17 +43,28 @@ public class Plane implements Geometry {
     }
 
     /*******************getters****************/
-    @Override
-    public Vector getNormal(Point3D point) {
-        return Vector.ZERO;
-    }
+
 
     /**
      * getter
      *
      * @return null
      */
+    public Point3D getPoint() {
+        return point;
+    }
+
+    /**
+     * get normal
+     *
+     * @return normal
+     */
     public Vector getNormal() {
-        return getNormal(null);
+        return normal;
+    }
+
+    @Override
+    public Vector getNormal(Point3D point) {
+        return null;
     }
 }

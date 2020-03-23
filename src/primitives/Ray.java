@@ -3,14 +3,14 @@ package primitives;
 import java.util.Objects;
 
 public class Ray {
-    Point3D _p0;
-    Vector _dir;
+    private Point3D _p0;
+    private Vector _dir;
 
 /***************contractors***********/
     /**
      * contractor for creating a Ray
      *
-     * @param _p0 get point3D for contractor
+     * @param _p0  get point3D for contractor
      * @param _dir get vector for contractor
      */
     public Ray(Point3D _p0, Vector _dir) {
