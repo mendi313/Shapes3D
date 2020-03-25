@@ -5,7 +5,6 @@ import java.util.*;
 
 public class Vector {
     private Point3D head;
-    public static final Vector ZERO = new Vector(new Point3D(0.0, 0.0, 0.0));
 
     /***************contractors***********/
     /**
@@ -30,22 +29,19 @@ public class Vector {
      * @param _z get z for the contractor
      */
     public Vector(double _x, double _y, double _z) {
-        if (_x == 0 && _y == 0 && _z == 0)
-            throw new IllegalArgumentException("cannot except the zero Coordinates");
-        else
-            head = new Point3D(_x, _y, _z);
+        this(new Point3D(_x,_y,_z));
     }
 
     /**
      * contractor point param
      *
-     * @param other get point3D for the contractor
+     * @param p get point3D for the contractor
      */
-    public Vector(Point3D other) {
-        if (other.getX().equals(0) && other.getY().equals(0) && other.getZ().equals(0))
-            throw new IllegalArgumentException("cannot except the zero point");
-        else
-            this.head = other;
+    public Vector(Point3D p) {
+        if (p.equals(Point3D.ZERO)) {
+            throw new IllegalArgumentException("Point3D(0.0,0.0,0.0) not valid for vector head");
+        }
+        this.head = new Point3D(p.getX()._coord, p.getY()._coord, p.getZ()._coord);
     }
 
     /**
@@ -101,9 +97,7 @@ public class Vector {
 
     @Override
     public String toString() {
-        return "Vector{" +
-                "head=" + head +
-                '}';
+        return head.toString();
     }
 
     /**
@@ -162,11 +156,13 @@ public class Vector {
     }
 
     public Vector normalize() {
-        double size = length();
+        double length = this.length();
+        if (length == 0)
+            throw new ArithmeticException("divide by ZERO");
         this.head = new Point3D(
-                this.head.getX().get() / size,
-                this.head.getY().get() / size,
-                this.head.getZ().get() / size);
+                this.head.getX().get() / length,
+                this.head.getY().get() / length,
+                this.head.getZ().get() / length);
         return this;
     }
 
@@ -175,5 +171,6 @@ public class Vector {
         v.normalize();
         return v;
     }
+
 }
 
