@@ -1,4 +1,4 @@
-package unittests;
+package unittests.primitives;
 
 import static org.junit.Assert.*;
 
@@ -28,11 +28,12 @@ public class VectorTests extends Object {
     @Test
     public void testSubtract() {
         v1 = v1.subtract(v2);
-        assertEquals(v1, new Vector(2.0, 2.0, 2.0));
+        assertEquals(new Vector(2.0, 2.0, 3.0),v1);
+        assertTrue(v1.equals(new Vector(2.0, 2.0, 3.0)));
 
         v2 = v2.subtract(v1);
-        assertEquals(new Vector(-3.0, -3.0, -3.0), v2);
-        assertTrue(v2.equals(new Vector(-3.0, -3.0, -3.0)));
+        assertEquals(new Vector(-3.0,-3.0,-5.0),v2);
+        assertTrue(v2.equals(new Vector(-3.0,-3.0,-5.0)));
 
     }
 
@@ -91,11 +92,11 @@ public class VectorTests extends Object {
     public void testCrossProduct() {
 
         Vector v1 = new Vector(3.5, -5.0, 10.0);
-        Vector v2 = new Vector(2.5,7,0.5);
+        Vector v2 = new Vector(2.5, 7, 0.5);
         Vector v3 = v1.crossProduct(v2);
 
-        assertEquals( 0, v3.dotProduct(v2), 1e-10);
-        assertEquals( 0, v3.dotProduct(v1), 1e-10);
+        assertEquals(0, v3.dotProduct(v2), 1e-10);
+        assertEquals(0, v3.dotProduct(v1), 1e-10);
 
         Vector v4 = v2.crossProduct(v1);
 
@@ -105,13 +106,11 @@ public class VectorTests extends Object {
         try {
             v3.add(v4);
             fail("Vector (0,0,0) not valid");
-        }
-        catch  (IllegalArgumentException e)
-        {
-            assertTrue(e.getMessage()!= null);
+        } catch (IllegalArgumentException e) {
+            assertTrue(e.getMessage() != null);
         }
 //        assertTrue(v3.length() >84);
-        assertEquals(84,v3.length(),0.659);
+        assertEquals(84, v3.length(), 0.659);
 
     }
 
