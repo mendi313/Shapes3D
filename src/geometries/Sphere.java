@@ -13,8 +13,8 @@ public class Sphere extends RadialGeometry {
     /**
      * contractor for creating a Sphere
      *
-     * @param _radius get radios for contractor
-     * @param _center get point3D for contractor
+     * @param _radius first param
+     * @param _center second param
      */
     public Sphere(double _radius, Point3D _center) {
         super(_radius);
@@ -22,7 +22,7 @@ public class Sphere extends RadialGeometry {
     }
 
     /**
-     * getter
+     * get_center
      *
      * @return center point
      */
