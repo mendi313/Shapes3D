@@ -20,9 +20,9 @@ public class Tube extends RadialGeometry {
     /**
      * constructor for a new Cylinder object
      *
-     * @param _radius    the radius of the cylinder
-     * @param _direction the direction of the cylinder
-     * @throws Exception in case of a negative radius
+     * @param _radius    the first param
+     * @param _center    the second param
+     * @param _direction the third param
      */
     public Tube(double _radius, Point3D _center, Vector _direction) {
         super(_radius);
@@ -41,10 +41,20 @@ public class Tube extends RadialGeometry {
         this._direction = other._direction.normalized();
     }
 
+    /**
+     * get_direction
+     *
+     * @return Vector(_direction)
+     */
     public Vector get_direction() {
         return new Vector(_direction);
     }
 
+    /**
+     * get_center
+     *
+     * @return Point3D(_center)
+     */
     public Point3D get_center() {
         return new Point3D(_center);
     }

@@ -4,6 +4,17 @@ import primitives.Point3D;
 import primitives.Vector;
 
 public class Triangle extends Polygon {
+    /**
+     * contractor for creating a Triangle
+     *
+     * @param p1 first param
+     * @param p2 second param
+     * @param p3 third param
+     */
+    public Triangle(Point3D p1, Point3D p2, Point3D p3) {
+        super(new Point3D[]{p1, p2, p3});
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -15,6 +26,10 @@ public class Triangle extends Polygon {
                 _vertices.get(2).equals(tr._vertices.get(2));
     }
 
+    @Override
+    public Vector getNormal(Point3D point) {
+        return null;
+    }
 
     @Override
     public String toString() {
@@ -25,7 +40,5 @@ public class Triangle extends Polygon {
         return result;
     }
 
-    public Triangle(Point3D p1, Point3D p2, Point3D p3) {
-        super(new Point3D[]{p1, p2, p3});
-    }
+
 }
