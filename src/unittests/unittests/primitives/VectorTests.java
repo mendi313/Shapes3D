@@ -2,6 +2,7 @@ package unittests.primitives;
 
 import static java.lang.System.out;
 import static org.junit.Assert.*;
+import static primitives.Util.isZero;
 
 import org.junit.Test;
 
@@ -9,15 +10,16 @@ import primitives.Vector;
 
 public class VectorTests extends Object {
 
-    Vector v1 = new Vector(1.0, 1.0, 1.0);
-    Vector v2 = new Vector(-1.0, -1.0, -2.0);
+    Vector v1 = new Vector(1, 2, 3);
+    Vector v2 = new Vector(-2, -4, -6);
+    Vector v3 = new Vector(0, 3, -2);
 
     @Test
     public void vectorCreateTest() {
         try {
             new Vector(0, 0, 0);
             out.println("ERROR: zero vector does not throw an exception");
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             out.println(e);
         }
     }
@@ -39,23 +41,19 @@ public class VectorTests extends Object {
     @Test
     public void testSubtract() {
         v1 = v1.subtract(v2);
-        assertEquals(new Vector(2.0, 2.0, 3.0), v1);
-        assertTrue(v1.equals(new Vector(2.0, 2.0, 3.0)));
-
+        assertEquals(new Vector(3.0, 6.0, 9.0), v1);
         v2 = v2.subtract(v1);
-        assertEquals(new Vector(-3.0, -3.0, -5.0), v2);
-        assertTrue(v2.equals(new Vector(-3.0, -3.0, -5.0)));
-
+        assertEquals(new Vector(-5.0, -10.0, -15.0), v2);
     }
 
     @Test
     public void testScaling() {
         v1 = v1.scale(1);
-        assertEquals(new Vector(1.0, 1.0, 1.0), v1);
+        assertEquals(new Vector(1.0,2.0,3.0), v1);
         v1 = v1.scale(2);
-        assertEquals(new Vector(2.0, 2.0, 2.0), v1);
+        assertEquals(new Vector(2.0,4.0,6.0), v1);
         v1 = v1.scale(-2);
-        assertEquals(new Vector(-4.0, -4.0, -4.0), v1);
+        assertEquals(new Vector(-4.0,-8.0,-12.0), v1);
         try {
             v1 = v1.scale(0);
         } catch (IllegalArgumentException e) {
@@ -67,61 +65,50 @@ public class VectorTests extends Object {
     @Test
     public void testDotProduct() {
 
-        Vector v1 = new Vector(3.5, -5, 10);
-        Vector v2 = new Vector(2.5, 7, 0.5);
-
-        assertTrue(Double.compare(v1.dotProduct(v2), (8.75 + -35 + 5)) == 0);
+        if (!isZero(v1.dotProduct(v3)))
+            out.println("ERROR: dotProduct() for orthogonal vectors is not zero");
+        if (!isZero(v1.dotProduct(v2) + 28))
+            out.println("ERROR: dotProduct() wrong value");
 
     }
 
     @Test
     public void testLength() {
-        Vector v = new Vector(3.5, -5, 10);
-        assertTrue(v.length() ==
-                Math.sqrt(12.25 + 25 + 100));
+        if (!isZero(v1.lengthSquared() - 14))
+            out.println("ERROR: lengthSquared() wrong value");
+        if (!isZero(new Vector(0, 3, 4).length() - 5))
+            out.println("ERROR: length() wrong value");
     }
 
     @Test
     public void testNormalize() {
 
-        Vector v = new Vector(3.5, -5, 10);
-        v.normalize();
-        assertEquals(1, v.length(), 1e-10);
-
-        try {
-            Vector v1 = new Vector(0, 0, 0);
-            v.normalize();
-            fail("Didn't throw divide by zero exception!");
-        } catch (IllegalArgumentException ex) {
-            assertEquals("Point3D(0.0,0.0,0.0) not valid for vector head", ex.getMessage());
-        }
-        assertTrue(true);
+        Vector v = new Vector(1, 2, 3);
+        Vector vCopy = new Vector(v);
+        Vector vCopyNormalize = vCopy.normalize();
+        if (vCopy != vCopyNormalize)
+            out.println("ERROR: normalize() function creates a new vector");
+        if (!isZero(vCopyNormalize.length() - 1))
+            out.println("ERROR: normalize() result is not a unit vector");
+        Vector u = v.normalized();
+        if (u == v)
+            out.println("ERROR: normalizated() function does not create a new vector");
 
     }
 
     @Test
     public void testCrossProduct() {
 
-        Vector v1 = new Vector(3.5, -5.0, 10.0);
-        Vector v2 = new Vector(2.5, 7, 0.5);
-        Vector v3 = v1.crossProduct(v2);
-
-        assertEquals(0, v3.dotProduct(v2), 1e-10);
-        assertEquals(0, v3.dotProduct(v1), 1e-10);
-
-        Vector v4 = v2.crossProduct(v1);
-
-        System.out.println(v3.toString());
-        System.out.println(v4.toString());
-
-        try {
-            v3.add(v4);
-            fail("Vector (0,0,0) not valid");
-        } catch (IllegalArgumentException e) {
-            assertTrue(e.getMessage() != null);
+        try { // test zero vector
+            v1.crossProduct(v2);
+            out.println("ERROR: crossProduct() for parallel vectors does not throw an exception");
+        } catch (Exception e) {
         }
-//        assertTrue(v3.length() >84);
-        assertEquals(84, v3.length(), 0.659);
+        Vector vr = v1.crossProduct(v3);
+        if (!isZero(vr.length() - v1.length() * v3.length()))
+            out.println("ERROR: crossProduct() wrong result length");
+        if (!isZero(vr.dotProduct(v1)) || !isZero(vr.dotProduct(v3)))
+            out.println("ERROR: crossProduct() result is not orthogonal to its operands");
 
     }
 
