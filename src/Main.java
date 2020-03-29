@@ -21,11 +21,6 @@ public final class Main {
      */
     public static void main(String[] args) {
 
-        try { // test zero vector
-            new Vector(0, 0, 0);
-            out.println("ERROR: zero vector does not throw an exception");
-        } catch (Exception e) {
-        }
 
         Vector v1 = new Vector(1, 2, 3);
         Vector v2 = new Vector(-2, -4, -6);

@@ -1,5 +1,6 @@
 package unittests.primitives;
 
+import static java.lang.System.out;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
@@ -10,6 +11,16 @@ public class VectorTests extends Object {
 
     Vector v1 = new Vector(1.0, 1.0, 1.0);
     Vector v2 = new Vector(-1.0, -1.0, -2.0);
+
+    @Test
+    public void vectorCreateTest() {
+        try {
+            new Vector(0, 0, 0);
+            out.println("ERROR: zero vector does not throw an exception");
+        } catch (IllegalArgumentException e){
+            out.println(e);
+        }
+    }
 
     @Test
     public void testAdd() {
@@ -28,12 +39,12 @@ public class VectorTests extends Object {
     @Test
     public void testSubtract() {
         v1 = v1.subtract(v2);
-        assertEquals(new Vector(2.0, 2.0, 3.0),v1);
+        assertEquals(new Vector(2.0, 2.0, 3.0), v1);
         assertTrue(v1.equals(new Vector(2.0, 2.0, 3.0)));
 
         v2 = v2.subtract(v1);
-        assertEquals(new Vector(-3.0,-3.0,-5.0),v2);
-        assertTrue(v2.equals(new Vector(-3.0,-3.0,-5.0)));
+        assertEquals(new Vector(-3.0, -3.0, -5.0), v2);
+        assertTrue(v2.equals(new Vector(-3.0, -3.0, -5.0)));
 
     }
 

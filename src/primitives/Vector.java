@@ -29,7 +29,11 @@ public class Vector {
      * @param _z get z for the contractor
      */
     public Vector(double _x, double _y, double _z) {
-        this(new Point3D(_x,_y,_z));
+        this(new Point3D(_x, _y, _z));
+    }
+
+    public Vector(Point3D p1, Point3D p2) {
+        this(p1.subtract(p2));
     }
 
     /**

@@ -1,57 +1,39 @@
 package geometries;
 
 import primitives.Point3D;
-import primitives.Vector;
+import primitives.*;
 
 public class Plane implements Geometry {
-    private Point3D point;
-    private Vector normal;
 
-    /***************contractors***********/
-    /**
-     * contractor for creating a Plane
-     *
-     * @param p1 get point3D for contractor
-     * @param p2 get point3D for contractor
-     * @param p3 get point3D for contractor
-     */
+    Point3D _p;
+    Vector _normal;
+
     public Plane(Point3D p1, Point3D p2, Point3D p3) {
-        Vector u = p1.subtract(p2);
-        Vector v = p1.subtract(p3);
-        Vector n = u.crossProduct(v);
-        n.normalize();
-        this.normal = n.scale(-1);
-        this.point = p1;
+        _p = new Point3D(p1);
+
+        Vector U = new Vector(p1, p2);
+        Vector V = new Vector(p1, p3);
+        Vector N = U.crossProduct(V);
+        N.normalize();
+
+        _normal = N;
+//        _normal = N.scale(-1);
+
     }
 
-    public Plane(Point3D p, Vector normal) {
-        this.point = new Point3D(p);
-        this.normal = new Vector(normal);
+    public Plane(Point3D _p, Vector _normal) {
+        this._p = new Point3D(_p);
+        this._normal = new Vector(_normal);
     }
 
-/*******************getters****************/
-
-
-    /**
-     * getter
-     *
-     * @return null
-     */
-    public Point3D getPoint() {
-        return point;
+    @Override
+    public Vector getNormal(Point3D p) {
+        return _normal;
     }
 
-    /**
-     * get normal
-     *
-     * @return normal
-     */
+    //because polygon
     public Vector getNormal() {
         return getNormal(null);
     }
 
-    @Override
-    public Vector getNormal(Point3D point) {
-        return normal;
-    }
 }

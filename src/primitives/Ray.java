@@ -1,56 +1,75 @@
 package primitives;
 
-import java.util.Objects;
-
+/**
+ * Ray class
+ */
 public class Ray {
-    private Point3D _p0;
-    private Vector _dir;
 
-/***************contractors***********/
     /**
-     * contractor for creating a Ray
-     *
-     * @param _p0  get point3D for contractor
-     * @param _dir get vector for contractor
+     * The point from which the ray starts.
      */
-    public Ray(Point3D _p0, Vector _dir) {
-        this._dir = new Vector(_dir.normalize());
-        this._p0 = new Point3D(_p0);
+    private final Point3D _point;
+    /**
+     * The direction of the ray.
+     */
+    private final Vector _direction;
+
+    /**
+     * Constructor for creating a new instance of this class
+     *
+     * @param point     the start of the ray.
+     * @param direction the direction of the ray.
+     */
+    public Ray(Point3D point, Vector direction) {
+        _point = new Point3D(point);
+        _direction = new Vector(direction).normalized();
     }
 
     /**
-     * getter
+     * Copy constructor for a deep copy of an Ray object.
      *
-     * @return _p0
+     * @param other the object that being copied
      */
-    public Point3D get_p0() {
-        return new Point3D(_p0);
+    public Ray(Ray other) {
+        this._point = new Point3D(other._point);
+        this._direction = other._direction.normalized();
     }
 
-    /**
-     * getter
-     *
-     * @return _dir
-     */
-    public Vector get_dir() {
-        return new Vector(_dir);
-    }
-
-    /************toString() and equals() ****/
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Ray ray = (Ray) o;
-        return _p0.equals(ray._p0) &&
-                _dir.equals(ray._dir);
+    public boolean equals(Object obj) {
+        if (obj == null || !(obj instanceof Ray))
+            return false;
+        if (this == obj)
+            return true;
+        Ray other = (Ray) obj;
+        return (_point.equals(other._point) &&
+                _direction.equals(other._direction));
     }
 
     @Override
     public String toString() {
-        return "Ray{" +
-                "_p0=" + _p0 +
-                ", _dir=" + _dir +
-                '}';
+        return String.format("point: " + _point + ", direction: " + _direction);
+    }
+
+    /**
+     * Getter for the point from which the ray starts.
+     *
+     * @return A new Point3D that represents the
+     * point from which the ray starts.
+     */
+    public Point3D getPoint() {
+        return new Point3D(_point);
+    }
+
+    /**
+     * Getter for the direction of the ray that is
+     * represented by this object.
+     *
+     * @return A new Vector that represents the
+     * direction of the ray that is
+     * represented by this object.
+     */
+    public Vector getDirection() {
+        return new Vector(_direction);
     }
 }
