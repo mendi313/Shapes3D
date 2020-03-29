@@ -21,24 +21,6 @@ public final class Main {
      */
     public static void main(String[] args) {
 
-
-        Vector v1 = new Vector(1, 2, 3);
-        Vector v2 = new Vector(-2, -4, -6);
-        Vector v3 = new Vector(0, 3, -2);
-
-
-        // test vector normalization vs vector length and cross-product
-        Vector v = new Vector(1, 2, 3);
-        Vector vCopy = new Vector(v);
-        Vector vCopyNormalize = vCopy.normalize();
-        if (vCopy != vCopyNormalize)
-            out.println("ERROR: normalize() function creates a new vector");
-        if (!isZero(vCopyNormalize.length() - 1))
-            out.println("ERROR: normalize() result is not a unit vector");
-        Vector u = v.normalized();
-        if (u == v)
-            out.println("ERROR: normalizated() function does not create a new vector");
-
         out.println("If there were no any other outputs - all tests succeeded!");
     }
 }
