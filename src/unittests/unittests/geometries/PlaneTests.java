@@ -7,8 +7,17 @@ import primitives.Vector;
 
 import static org.junit.Assert.*;
 
+/**
+ * Testing plane
+ */
 public class PlaneTests extends Object {
 
+    /**
+     * Test method for
+     * {@link geometries.Plane#getNormal(primitives.Point3D)}.
+     */
+
+    // ============ Equivalence Partitions Tests ==============
     @Test
     public void testGetNormal() {
         Plane pl1 = new Plane(new Point3D(0, 1, 0), new Point3D(1, 0, 0), new Point3D(0, 0, 1));

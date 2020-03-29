@@ -8,12 +8,23 @@ import org.junit.Test;
 
 import primitives.Vector;
 
+/**
+ * Testing Vector
+ */
 public class VectorTests extends Object {
+    /**
+     * Test method for
+     * {@link primitives.Vector #vector(primitives.Coordinate, primitives.Coordinate, primitives.Coordinate}.
+     */
 
     Vector v1 = new Vector(1, 2, 3);
     Vector v2 = new Vector(-2, -4, -6);
     Vector v3 = new Vector(0, 3, -2);
 
+
+    // ============ Equivalence Partitions Tests ==============
+
+    // TC01: test zero vector
     @Test
     public void vectorCreateTest() {
         try {
@@ -24,6 +35,7 @@ public class VectorTests extends Object {
         }
     }
 
+    // TC02: test add
     @Test
     public void testAdd() {
 
@@ -38,6 +50,7 @@ public class VectorTests extends Object {
 
     }
 
+    // TC03: test subtract
     @Test
     public void testSubtract() {
         v1 = v1.subtract(v2);
@@ -46,14 +59,15 @@ public class VectorTests extends Object {
         assertEquals(new Vector(-5.0, -10.0, -15.0), v2);
     }
 
+    // TC04: test scaling
     @Test
     public void testScaling() {
         v1 = v1.scale(1);
-        assertEquals(new Vector(1.0,2.0,3.0), v1);
+        assertEquals(new Vector(1.0, 2.0, 3.0), v1);
         v1 = v1.scale(2);
-        assertEquals(new Vector(2.0,4.0,6.0), v1);
+        assertEquals(new Vector(2.0, 4.0, 6.0), v1);
         v1 = v1.scale(-2);
-        assertEquals(new Vector(-4.0,-8.0,-12.0), v1);
+        assertEquals(new Vector(-4.0, -8.0, -12.0), v1);
         try {
             v1 = v1.scale(0);
         } catch (IllegalArgumentException e) {
@@ -62,6 +76,7 @@ public class VectorTests extends Object {
         }
     }
 
+    // TC04: test Dot-Product
     @Test
     public void testDotProduct() {
 
@@ -72,6 +87,7 @@ public class VectorTests extends Object {
 
     }
 
+    // TC04: test length
     @Test
     public void testLength() {
         if (!isZero(v1.lengthSquared() - 14))
@@ -80,6 +96,7 @@ public class VectorTests extends Object {
             out.println("ERROR: length() wrong value");
     }
 
+    // TC04: test vector normalization vs vector length and cross-product
     @Test
     public void testNormalize() {
 
@@ -96,6 +113,7 @@ public class VectorTests extends Object {
 
     }
 
+    // TC04: test Cross-Product
     @Test
     public void testCrossProduct() {
 
