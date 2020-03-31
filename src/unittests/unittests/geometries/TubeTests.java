@@ -33,6 +33,7 @@ public class TubeTests extends Object {
         // assertTrue(t1.getNormal(new Point3D(0, -4, 0)).equals(new Vector(new Point3D(0, -1, 0))));
         // assertTrue(t1.getNormal(new Point3D(4, 0, 0)).equals(new Vector(new Point3D(1, 0, 0))));
         //assertTrue(t1.getNormal(new Point3D(-4, 0, 0)).equals(new Vector(new Point3D(-1, 0, 0))));
+        //assertEquals(new Point3D(1, 1, 0)).equals(new Vector(new Point3D(0, 0, -1)),t2);
         //assertTrue(t2.getNormal(new Point3D(1, 1, 0)).equals(new Vector(new Point3D(0, 0, -1))));
         // assertTrue(t2.getNormal(new Point3D(0, 1, 1)).equals(new Vector(new Point3D(-1, 0, 0))));
         //assertTrue(t2.getNormal(new Point3D(1, 0, 1)).equals(new Vector(new Point3D(0, -1, 0))));

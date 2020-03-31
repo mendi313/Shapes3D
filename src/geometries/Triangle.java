@@ -12,7 +12,7 @@ public class Triangle extends Polygon {
      * @param p3 third param
      */
     public Triangle(Point3D p1, Point3D p2, Point3D p3) {
-        super(new Point3D[]{p1, p2, p3});
+        super(p1, p2, p3);
     }
 
     @Override
@@ -27,11 +27,6 @@ public class Triangle extends Polygon {
     }
 
     @Override
-    public Vector getNormal(Point3D point) {
-        return super._plane.getNormal();
-    }
-
-    @Override
     public String toString() {
         String result = "";
         for (Point3D p : _vertices) {
@@ -39,6 +34,4 @@ public class Triangle extends Polygon {
         }
         return result;
     }
-
-
 }

@@ -19,19 +19,15 @@ public class SphereTests extends Object {
 
     // ============ Equivalence Partitions Tests ==============
     @Test
-    public void getNormalTest() {
-        Sphere s1 = new Sphere(4, new Point3D(0, 0, 0));
-        Sphere s2 = new Sphere(1, new Point3D(1, 1, 1));
+    public void getNormalTest1() {
+        Sphere sp = new Sphere(1.0, new Point3D(0, 0, 1));
+        assertEquals(new Vector(0, 0, 1), sp.getNormal(new Point3D(0, 0, 2)));
+    }
 
-
-        assertTrue(s1.getNormal(new Point3D(0, 0, 4)).equals(new Vector(new Point3D(0, 0, 1))));
-        assertTrue(s1.getNormal(new Point3D(0, 0, -4)).equals(new Vector(new Point3D(0, 0, -1))));
-        assertTrue(s1.getNormal(new Point3D(0, 4, 0)).equals(new Vector(new Point3D(0, 1, 0))));
-        assertTrue(s1.getNormal(new Point3D(0, -4, 0)).equals(new Vector(new Point3D(0, -1, 0))));
-        assertTrue(s1.getNormal(new Point3D(4, 0, 0)).equals(new Vector(new Point3D(1, 0, 0))));
-        assertTrue(s1.getNormal(new Point3D(-4, 0, 0)).equals(new Vector(new Point3D(-1, 0, 0))));
-        assertTrue(s2.getNormal(new Point3D(1, 1, 0)).equals(new Vector(new Point3D(0, 0, -1))));
-        assertTrue(s2.getNormal(new Point3D(0, 1, 1)).equals(new Vector(new Point3D(-1, 0, 0))));
-        assertTrue(s2.getNormal(new Point3D(1, 0, 1)).equals(new Vector(new Point3D(0, -1, 0))));
+    @Test
+    public void getNormalTest2() {
+        Sphere sp = new Sphere(1, new Point3D(0, 0, 1));
+        assertNotEquals(new Vector(0, 0, 1), sp.getNormal(new Point3D(0, 1, 1)));
+        System.out.println(sp.getNormal(new Point3D(0, 1, 1)));
     }
 }

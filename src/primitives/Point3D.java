@@ -41,9 +41,10 @@ public class Point3D {
      * @param other get point3D for the contractor
      */
     public Point3D(Point3D other) {
-        x = new Coordinate(other.getX());
-        y = new Coordinate(other.getY());
-        z = new Coordinate(other.getZ());
+        this.x = new Coordinate(other.x);
+        this.y = new Coordinate(other.y);
+        this.z = new Coordinate(other.z);
+
     }
     /****************getters*************/
     /**

@@ -27,7 +27,7 @@ public class Sphere extends RadialGeometry {
      * @return center point
      */
     public Point3D get_center() {
-        return _center;
+        return new Point3D(_center);
     }
 
     @Override
