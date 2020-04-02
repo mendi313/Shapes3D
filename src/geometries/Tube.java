@@ -2,6 +2,8 @@ package geometries;
 
 import primitives.*;
 
+import java.util.List;
+
 import static primitives.Util.isZero;
 
 /**
@@ -20,7 +22,6 @@ public class Tube extends RadialGeometry {
      *
      * @param _radius the radius of the cylinder
      * @param _ray    the direction of the cylinder from a center point
-     * @throws Exception in case of a negative radius
      */
     public Tube(double _radius, Ray _ray) {
         super(_radius);
@@ -75,7 +76,7 @@ public class Tube extends RadialGeometry {
     @Override
     public Vector getNormal(Point3D point) {
         //The vector from the point of the cylinder to the given point
-        Point3D o = _ray.getPoint();
+        Point3D o = _ray.getPoint(); // at this point o = p0
         Vector v = _ray.getDirection();
 
         Vector vector1 = point.subtract(o);
@@ -84,11 +85,16 @@ public class Tube extends RadialGeometry {
         double projection = vector1.dotProduct(v);
         if (!isZero(projection)) {
             // projection of P-O on the ray:
-            o.add(v.scale(projection));
+            o = o.add(v.scale(projection));
         }
 
         //This vector is orthogonal to the _direction vector.
         Vector check = point.subtract(o);
         return check.normalize();
+    }
+
+    @Override
+    public List<Point3D> findIntsersections(Ray ray) {
+        return null;
     }
 }

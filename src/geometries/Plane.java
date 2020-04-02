@@ -3,6 +3,8 @@ package geometries;
 import primitives.Point3D;
 import primitives.*;
 
+import java.util.List;
+
 public class Plane implements Geometry {
 
     Point3D _p;
@@ -36,4 +38,8 @@ public class Plane implements Geometry {
         return getNormal(null);
     }
 
+    @Override
+    public List<Point3D> findIntsersections(Ray ray) {
+        return null;
+    }
 }

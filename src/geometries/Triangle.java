@@ -1,7 +1,10 @@
 package geometries;
 
 import primitives.Point3D;
+import primitives.Ray;
 import primitives.Vector;
+
+import java.util.List;
 
 public class Triangle extends Polygon {
     /**
@@ -33,5 +36,10 @@ public class Triangle extends Polygon {
             result += p.toString();
         }
         return result;
+    }
+
+    @Override
+    public List<Point3D> findIntsersections(Ray ray) {
+        return super.findIntsersections(ray);
     }
 }

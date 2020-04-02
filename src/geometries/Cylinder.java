@@ -19,7 +19,7 @@ public class Cylinder extends Tube {
      * Cylinder constructor
      *
      * @param _radius firt param
-     * @param _ray second param
+     * @param _ray    second param
      * @param _height third param
      */
     public Cylinder(double _radius, Ray _ray, double _height) {
@@ -52,7 +52,15 @@ public class Cylinder extends Tube {
         return point.subtract(o).normalize();
     }
 
+    /**
+     * @return height
+     */
     public double get_height() {
         return _height;
+    }
+
+    @Override
+    public List<Point3D> findIntsersections(Ray ray) {
+        return null;
     }
 }

@@ -1,10 +1,8 @@
 package geometries;
 
-import primitives.Coordinate;
-import primitives.Point3D;
-import primitives.Util;
-import primitives.Vector;
+import primitives.*;
 
+import java.util.List;
 import java.util.Objects;
 
 public class Sphere extends RadialGeometry {
@@ -52,4 +50,8 @@ public class Sphere extends RadialGeometry {
         return orthogonal.normalized();
     }
 
+    @Override
+    public List<Point3D> findIntsersections(Ray ray) {
+        return null;
+    }
 }
