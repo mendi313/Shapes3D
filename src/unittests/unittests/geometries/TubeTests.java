@@ -37,14 +37,6 @@ public class TubeTests extends Object {
         assertEquals("", new Vector(0, 0, 1), t2.getNormal(new Point3D(2, 2, 2)));
         // =============== Boundary Values Tests ==================
 
-     /*   //Test point not on the Tube
-        try {
-            Vector v = t2.getNormal(new Point3D(0, 0, 3));
-            fail("not thrown Exception.");
-        } catch (Exception e) {
-            assertTrue(e instanceof IllegalArgumentException);
-        }*/
-
         //Test point null
         try {
             t2.getNormal(null);

@@ -1,5 +1,7 @@
 package primitives;
 
+import static primitives.Util.isZero;
+
 /**
  * Ray class
  */
@@ -71,5 +73,13 @@ public class Ray {
      */
     public Vector getDirection() {
         return new Vector(_direction);
+    }
+
+    /**
+     * @param length
+     * @return new Point3D
+     */
+    public Point3D getTargetPoint(double length) {
+        return isZero(length) ? _point : _point.add(_direction.scale(length));
     }
 }
