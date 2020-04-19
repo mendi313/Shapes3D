@@ -36,7 +36,7 @@ public class TriangleTests extends Object {
         //===================EP: Three cases:=======================//
         // TC01: Inside triangle (1 point)
         primitives.Ray TC01 = new primitives.Ray(new primitives.Point3D(1.0, 1.0, -1.0), new primitives.Vector(0.0, 0.0, 1.0));
-        java.util.List<primitives.Point3D> resultTC01 = triangle.findIntersections(TC01);
+        List<Point3D> resultTC01 = triangle.findIntersections(TC01);
 
         assertEquals("Wrong number of points", 1, resultTC01.size());
 
@@ -51,6 +51,6 @@ public class TriangleTests extends Object {
         primitives.Ray TC022 = new primitives.Ray(new primitives.Point3D(2.0, -0.5, -1.0), new primitives.Vector(0.0, 0.0, 1.0));
         java.util.List<primitives.Point3D> resultTC022 = triangle.findIntersections(TC022);
 
-       assertEquals("Wrong number of points", null, resultTC022);
+        assertEquals("Wrong number of points", null, resultTC022);
     }
 }
