@@ -77,6 +77,18 @@ public class Point3D {
     /**
      * calculate vector between point to point
      *
+     * @param v get Vector for the subtract
+     * @return Point3D
+     */
+    public Point3D subtract(Vector v) {
+        return new Point3D(this.x._coord - v.getHead().x._coord,
+                this.y._coord - v.getHead().y._coord,
+                this.z._coord - v.getHead().z._coord);
+    }
+
+    /**
+     * calculate vector between point to point
+     *
      * @param other get point3D for the subtract
      * @return Vector
      */
