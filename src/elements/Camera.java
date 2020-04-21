@@ -13,20 +13,36 @@ public class Camera {
     Vector _vUp;
     Vector _vRight;
 
-    public Camera(Point3D _p0, Vector _vTo, Vector _vUp) {
+    /***************contractors***********/
+    /**
+     * @param p0  get p0 for the contractor
+     * @param vTo get vTo for the contractor
+     * @param vUp get vUp for the contractor
+     */
+    public Camera(Point3D p0, Vector vTo, Vector vUp) {
 
         //if the the vectors are not orthogonal, throw exception.
-        if (_vUp.dotProduct(_vTo) != 0)
+        if (vUp.dotProduct(vTo) != 0)
             throw new IllegalArgumentException("the vectors must be orthogonal");
 
-        this._p0 = new Point3D(_p0);
-        this._vTo = _vTo.normalized();
-        this._vUp = _vUp.normalized();
+        this._p0 = new Point3D(p0);
+        this._vTo = vTo.normalized();
+        this._vUp = vUp.normalized();
 
         _vRight = this._vTo.crossProduct(this._vUp).normalize();
 
     }
 
+    /**
+     * @param nX
+     * @param nY
+     * @param j
+     * @param i
+     * @param screenDistance
+     * @param screenWidth
+     * @param screenHeight
+     * @return
+     */
     public Ray constructRayThroughPixel(int nX, int nY,
                                         int j, int i, double screenDistance,
                                         double screenWidth, double screenHeight) {
@@ -57,19 +73,30 @@ public class Camera {
 
     }
 
-
+    /**
+     * @return
+     */
     public Point3D get_p0() {
         return new Point3D(_p0);
     }
 
+    /**
+     * @return
+     */
     public Vector get_vTo() {
         return new Vector(_vTo);
     }
 
+    /**
+     * @return
+     */
     public Vector get_vUp() {
         return new Vector(_vUp);
     }
 
+    /**
+     * @return
+     */
     public Vector get_vRight() {
         return new Vector(_vRight);
     }
