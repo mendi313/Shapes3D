@@ -15,9 +15,11 @@ public class Camera {
 
     /***************contractors***********/
     /**
-     * @param p0  get p0 for the contractor
-     * @param vTo get vTo for the contractor
-     * @param vUp get vUp for the contractor
+     * contractor for camera according to its position
+     *
+     * @param p0  camera location
+     * @param vTo camera TOWARDS direction
+     * @param vUp camera UP direction
      */
     public Camera(Point3D p0, Vector vTo, Vector vUp) {
 
@@ -34,14 +36,17 @@ public class Camera {
     }
 
     /**
-     * @param nX
-     * @param nY
-     * @param j
-     * @param i
-     * @param screenDistance
-     * @param screenWidth
-     * @param screenHeight
-     * @return
+     * function constructs a ray from camera location throw the center of
+     * a pixel (i,j) in the view plane
+     *
+     * @param nX             number of pixel in a row  of view plane
+     * @param nY             number of pixel in a column of view plane
+     * @param j              number of pixel in a row
+     * @param i              number of pixel in a column
+     * @param screenDistance distance from camera  to the view plane
+     * @param screenWidth    view plane width
+     * @param screenHeight   view plane height
+     * @return the ray through pixel's center
      */
     public Ray constructRayThroughPixel(int nX, int nY,
                                         int j, int i, double screenDistance,
@@ -50,7 +55,7 @@ public class Camera {
             throw new IllegalArgumentException("distance cannot be 0");
         }
 
-        Point3D Pc = _p0.add(_vTo.scale(screenDistance));
+        Point3D Pc = _p0.add(_vTo.scale(screenDistance));//the view plan center point
 
         double Ry = screenHeight / nY;
         double Rx = screenWidth / nX;
@@ -74,28 +79,36 @@ public class Camera {
     }
 
     /**
-     * @return
+     * getter for camera location
+     *
+     * @return the location point
      */
     public Point3D get_p0() {
         return new Point3D(_p0);
     }
 
     /**
-     * @return
+     * getter for the TOWARDS direction vector
+     *
+     * @return the TOWARDS direction
      */
     public Vector get_vTo() {
         return new Vector(_vTo);
     }
 
     /**
-     * @return
+     * getter for the UP direction vector
+     *
+     * @return the UP vector
      */
     public Vector get_vUp() {
         return new Vector(_vUp);
     }
 
     /**
-     * @return
+     * getter for the Right direction vector
+     *
+     * @return the Right vector
      */
     public Vector get_vRight() {
         return new Vector(_vRight);
