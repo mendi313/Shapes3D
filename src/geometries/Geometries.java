@@ -22,7 +22,7 @@ public class Geometries implements Intersectable {
     }
 
     /**
-     * @param ray
+     * @param ray to findIntersections
      * @return list of Point3D that intersect the osef
      */
     @Override

@@ -76,7 +76,7 @@ public class Ray {
     }
 
     /**
-     * @param length
+     * @param length to calculate the distance
      * @return new Point3D
      */
     public Point3D getTargetPoint(double length) {

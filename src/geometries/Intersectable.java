@@ -8,8 +8,8 @@ import java.util.List;
 public interface Intersectable {
     /**
      *
-     * @param ray ray pointing toward a Gepmtry
-     * @return List<Point3D> return values
+     * @param ray ray pointing toward a Geometry
+     * @return List of Point3D return values
      */
     List<Point3D> findIntersections(Ray ray);
 }
