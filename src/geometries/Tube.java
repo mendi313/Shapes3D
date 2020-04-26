@@ -4,6 +4,7 @@ import primitives.*;
 
 import java.util.List;
 
+import static java.lang.StrictMath.sqrt;
 import static primitives.Util.isZero;
 
 /**
@@ -95,6 +96,25 @@ public class Tube extends RadialGeometry {
 
     @Override
     public List<Point3D> findIntersections(Ray ray) {
-        return null;
+
+        Vector AB = _ray.getDirection();
+        Vector AO = ray.getPoint().subtract(_ray.getPoint());
+        Vector AOxAB = AO.crossProduct(AB);
+        Vector VxAB = ray.getDirection().crossProduct(AB);
+        double ab2 = AB.dotProduct(AB);
+        double a = VxAB.dotProduct(VxAB);
+        double b = 2 * VxAB.dotProduct(AOxAB);
+        double c = AOxAB.dotProduct(AOxAB) - (_radius * _radius * ab2);
+        double d = b * b - 4 * a * c;
+        if (d < 0)
+            return null;
+        double t1 = (-b - sqrt(d)) / (2 * a);
+        double t2 = (-b + sqrt(d)) / (2 * a);
+        if (t1 <= 0 && t2 <= 0) return null;
+        if (t1 > 0 && t2 > 0) return List.of(ray.getTargetPoint(t1), ray.getTargetPoint(t2)); //P1 , P2
+        if (t1 > 0)
+            return List.of(ray.getTargetPoint(t1));
+        else
+            return List.of(ray.getTargetPoint(t2));
     }
 }

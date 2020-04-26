@@ -83,7 +83,7 @@ public class CylinderTests extends Object {
         List<Point3D> result = cylinder.findIntersections(new Ray(new Point3D(0, 4, 0),
                 new Vector(1, 0, 0)));
 
-        assertEquals("Ray's line out of cylinder", null, result);
+       assertEquals("Ray's line out of cylinder", null, result.size());
 
         // TC02: Ray starts before and crosses the cylinder from the side (2 points)
         result = cylinder.findIntersections(new Ray(new Point3D(-1, 2, 0),
@@ -113,7 +113,7 @@ public class CylinderTests extends Object {
         Point3D p4 = new Point3D(0.5, 3, 0);
 
         // TC05: Ray starts before and crosses the cylinder (2 points)
-        result = cylinder.findIntersections(new Ray(new Point3D(0.5, -1, 0),
+       result = cylinder.findIntersections(new Ray(new Point3D(0.5, -1, 0),
                 new Vector(0, 1, 0)));
 
         assertEquals("Wrong number of points", 2, result.size());

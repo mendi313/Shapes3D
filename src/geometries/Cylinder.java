@@ -10,7 +10,7 @@ import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
 /**
- * Cylinder is afinite Tube with a certain _height
+ * Cylinder is a finite Tube with a certain _height
  */
 public class Cylinder extends Tube {
     private double _height;
@@ -18,7 +18,7 @@ public class Cylinder extends Tube {
     /**
      * Cylinder constructor
      *
-     * @param _radius firt param
+     * @param _radius first param
      * @param _ray    second param
      * @param _height third param
      */
@@ -53,6 +53,7 @@ public class Cylinder extends Tube {
     }
 
     /**
+     * get the height
      * @return height
      */
     public double get_height() {
