@@ -7,6 +7,8 @@ import org.junit.Test;
 import geometries.*;
 import primitives.*;
 
+import java.util.List;
+
 /**
  * Testing Polygons
  */
@@ -96,4 +98,42 @@ public class PolygonTests {
         assertEquals("Bad normal to trinagle", new Vector(sqrt3, sqrt3, sqrt3).scale(-1), pl.getNormal(new Point3D(0, 0, 1)));
     }
 
+
+    @Test
+    public void testFindIntersections() {
+        Polygon p2 = new Polygon(new Point3D(1, 2, 2),
+                new Point3D(1, 1, 1),
+                new Point3D(1, 3, 1));
+        // ============ Equivalence Partitions Tests ==============
+
+        // TC01: ray intersects inside polygon/triangle (1 points)
+        List<Point3D> result = p2.findIntersections(new Ray(new Point3D(1, 2, 1.5),
+                new Vector(1, 0, 1)));
+//        assertEquals("ray intersects inside polygon", 1, result.size());
+        // TC02: ray intersects outside against edge (0 points)
+        assertEquals("ray intersects outside against edge", null,
+                p2.findIntersections(new Ray(new Point3D(1, 1, 2),
+                        new Vector(1, 0, 1))));
+        // TC03: ray intersects outside against vertex (0 points)
+        assertEquals("ray intersects outside against vertex", null,
+                p2.findIntersections(new Ray(new Point3D(1, 2, 3),
+                        new Vector(1, 0, 1))));
+
+        // =============== Boundary Values Tests ==================
+
+        // TC11: ray intersects on edge (0 points)
+        assertEquals("ray intersects on edge", null,
+                p2.findIntersections(new Ray(new Point3D(1, 3, 3),
+                        new Vector(1, 0, 1))));
+        // TC12: ray intersects in vertex (0 points)
+        assertEquals("ray intersects in vertex", null,
+                p2.findIntersections(new Ray(new Point3D(1, 2, 2),
+                        new Vector(1, 0, 1))));
+        // TC13: ray intersects on edge's continuation (0 points)
+        assertEquals("ray intersects on edge's continuation", null,
+                p2.findIntersections(new Ray(new Point3D(1, 4, 0),
+                        new Vector(1, 0, 1))));
+    }
+
 }
+

@@ -32,7 +32,7 @@ public class CameraRayIntersectionsIntegrationTest {
                 if (intersections != null)
                     count += intersections.size();
             }
-        assertEquals("worng amount of intersections", 2, count);
+        assertEquals("wrong amount of intersections", 2, count);
 
         // TC02 Big Sphere 18 points
         sphere = new Sphere(2.5, new Point3D(0, 0, 2.5));
@@ -43,7 +43,7 @@ public class CameraRayIntersectionsIntegrationTest {
                 if (intersections != null)
                     count += intersections.size();
             }
-        assertEquals("worng amount of intersections", 18, count);
+        assertEquals("wrong amount of intersections", 18, count);
 
         // TC03 Medium Sphere 10 points
         sphere = new Sphere(2, new Point3D(0, 0, 2));
@@ -54,7 +54,7 @@ public class CameraRayIntersectionsIntegrationTest {
                 if (intersections != null)
                     count += intersections.size();
             }
-        assertEquals("worng amount of intersections", 10, count);
+        assertEquals("wrong amount of intersections", 10, count);
 
         // TC04 inside the Sphere 9 points
         sphere = new Sphere(4, new Point3D(0, 0, 0));
@@ -65,7 +65,7 @@ public class CameraRayIntersectionsIntegrationTest {
                 if (intersections != null)
                     count += intersections.size();
             }
-        assertEquals("worng amount of intersections", 9, count);
+        assertEquals("wrong amount of intersections", 9, count);
 
         // TC05  Sphere behind the camera 0 points
         sphere = new Sphere(0.5, new Point3D(0, 0, -1));
@@ -76,7 +76,7 @@ public class CameraRayIntersectionsIntegrationTest {
                 if (intersections != null)
                     count += intersections.size();
             }
-        assertEquals("worng amount of intersections", 0, count);
+        assertEquals("wrong amount of intersections", 0, count);
     }
 
 
@@ -93,7 +93,7 @@ public class CameraRayIntersectionsIntegrationTest {
                 if (intersections != null)
                     count += intersections.size();
             }
-        assertEquals("worng amount of intersections", 9, count);
+        assertEquals("wrong amount of intersections", 9, count);
 
         // TC02 Plane at an angle 9 points
         plane = new Plane(new Point3D(0, 0, 2), new Vector(0, 0, -4));
@@ -104,7 +104,7 @@ public class CameraRayIntersectionsIntegrationTest {
                 if (intersections != null)
                     count += intersections.size();
             }
-        assertEquals("worng amount of intersections", 9, count);
+        assertEquals("wrong amount of intersections", 9, count);
 
         // TC03 Plane at an angle 6 points
         plane = new Plane(new Point3D(0, 0, 2), new Vector(-5, -2, 3));
@@ -115,7 +115,7 @@ public class CameraRayIntersectionsIntegrationTest {
                 if (intersections != null)
                     count += intersections.size();
             }
-        assertEquals("worng amount of intersections", 6, count);
+        assertEquals("wrong amount of intersections", 6, count);
     }
 
     @Test
@@ -131,7 +131,7 @@ public class CameraRayIntersectionsIntegrationTest {
                 if (intersections != null)
                     count += intersections.size();
             }
-        assertEquals("worng amount of intersections", 1, count);
+        assertEquals("wrong amount of intersections", 1, count);
 
         // TC02 Big triangle 2 points
         triangle = new Triangle(new Point3D(0, -20, 2), new Point3D(1, 1, 2), new Point3D(-1, 1, 2));
@@ -142,7 +142,7 @@ public class CameraRayIntersectionsIntegrationTest {
                 if (intersections != null)
                     count += intersections.size();
             }
-        assertEquals("worng amount of intersections", 2, count);
+        assertEquals("wrong amount of intersections", 2, count);
     }
 
 }
