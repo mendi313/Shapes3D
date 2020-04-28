@@ -12,7 +12,7 @@ import scene.*;
 /**
  * Test rendering a basic image
  */
-public class RenderTests {
+public class RenderTests extends Object {
 
     /**
      * Produce a scene with basic 3D model and render it into a jpeg image with a
@@ -107,4 +107,7 @@ public class RenderTests {
         render.writeToImage();
     }
 
+    @Test
+    public void getClosestPoint() {
+    }
 }
