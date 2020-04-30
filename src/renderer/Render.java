@@ -114,14 +114,14 @@ public class Render {
      *
      * @param interval The interval between the lines.
      */
-    public void printGrid(int interval, Color colorsep) {
+    public void printGrid(int interval, Color separator) {
         double rows = this._imageWriter.getNx();
         double columns = _imageWriter.getNy();
         //Writing the lines.
         for (int col = 0; col < columns; col++) {
             for (int row = 0; row < rows; row++) {
                 if (col % interval == 0 || row % interval == 0) {
-                    _imageWriter.writePixel(row, col, colorsep);
+                    _imageWriter.writePixel(row, col, separator);
                 }
             }
         }
