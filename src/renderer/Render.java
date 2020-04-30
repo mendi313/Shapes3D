@@ -13,18 +13,35 @@ public class Render {
     private Scene _scene;
     private ImageWriter _imageWriter;
 
-    public Render(Scene _scene) {
-        this._scene = _scene;
-    }
+    /***************contractors***********/
 
+    /**
+     * contractors for build a scene with image
+     *
+     * @param imageWriter param to build a image
+     * @param scene       param to build a scene
+     */
     public Render(ImageWriter imageWriter, Scene scene) {
         this._imageWriter = imageWriter;
         this._scene = scene;
     }
 
-    public Scene get_scene() {
-        return _scene;
+    /**
+     * contractors that get the scene
+     *
+     * @param _scene for getting the scene
+     */
+    public Render(Scene _scene) {
+        this._scene = _scene;
     }
+
+    /**
+     * func that writhing image
+     */
+    public void writeToImage() {
+        _imageWriter.writeToImage();
+    }
+
 
     /**
      * Filling the buffer according to the geometries that are in the scene.
@@ -60,6 +77,15 @@ public class Render {
     }
 
     /**
+     * getter for the scene
+     *
+     * @return the scene
+     */
+    public Scene get_scene() {
+        return _scene;
+    }
+
+    /**
      * Finding the closest point to the P0 of the camera.
      *
      * @param intersectionPoints list of points, the function should find from
@@ -90,19 +116,15 @@ public class Render {
      */
     public void printGrid(int interval, Color colorsep) {
         double rows = this._imageWriter.getNx();
-        double collumns = _imageWriter.getNy();
+        double columns = _imageWriter.getNy();
         //Writing the lines.
-        for (int col = 0; col < collumns; col++) {
+        for (int col = 0; col < columns; col++) {
             for (int row = 0; row < rows; row++) {
                 if (col % interval == 0 || row % interval == 0) {
                     _imageWriter.writePixel(row, col, colorsep);
                 }
             }
         }
-    }
-
-    public void writeToImage() {
-        _imageWriter.writeToImage();
     }
 
     /**
