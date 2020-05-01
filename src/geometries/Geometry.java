@@ -7,5 +7,12 @@ import primitives.Vector;
  * interface for all geometries with getNormal
  */
 public interface Geometry extends Intersectable {
-    Vector getNormal(Point3D point);
+
+    /**
+     * func that calculate the Normal vector
+     *
+     * @param point to calculate the normal vector from her
+     * @return normal vector
+     */
+    public Vector getNormal(Point3D point);
 }

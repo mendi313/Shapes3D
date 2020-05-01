@@ -10,7 +10,6 @@ import static primitives.Util.*;
  * Polygon class represents two-dimensional polygon in 3D Cartesian coordinate
  * system
  *
- * @author Dan
  */
 public class Polygon implements Geometry {
     /**
@@ -82,11 +81,21 @@ public class Polygon implements Geometry {
         }
     }
 
+    /**
+     * @param point get the point to calculate the normal
+     * @return normal vector
+     */
     @Override
     public Vector getNormal(Point3D point) {
         return _plane.getNormal();
     }
 
+    /**
+     * func to find the Intersections point between the ray and the Polygon
+     *
+     * @param ray ray pointing toward a Geometry
+     * @return List<Point3D> with the Intersections point
+     */
     @Override
     public List<Point3D> findIntersections(Ray ray) {
         List<Point3D> intersections = _plane.findIntersections(ray);

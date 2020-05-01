@@ -9,8 +9,11 @@ import java.util.List;
 import static primitives.Util.isZero;
 
 public class Triangle extends Polygon {
+
+    /***************contractors***********/
+
     /**
-     * contractor for creating a Triangle
+     * contractor for creating a using tje father polygon
      *
      * @param p1 first param
      * @param p2 second param
@@ -40,6 +43,12 @@ public class Triangle extends Polygon {
         return result;
     }
 
+    /**
+     * func to find the Intersections point between the ray and the Triangle
+     *
+     * @param ray ray pointing toward a Geometry
+     * @return List<Point3D> with the Intersections point
+     */
     @Override
     public List<Point3D> findIntersections(Ray ray) {
         List<Point3D> intersections = _plane.findIntersections(ray);

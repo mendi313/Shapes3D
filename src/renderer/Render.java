@@ -92,7 +92,6 @@ public class Render {
      *                           this list the closet point to P0 of the camera in the scene.
      * @return the closest point to the camera
      */
-
     public Point3D getClosestPoint(List<Point3D> intersectionPoints) {
         Point3D result = null;
         double mindist = Double.MAX_VALUE;

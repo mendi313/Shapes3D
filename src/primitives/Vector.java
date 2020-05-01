@@ -7,6 +7,7 @@ public class Vector {
     private Point3D head;
 
     /***************contractors***********/
+
     /**
      * contractor for creating a Vector
      *
@@ -58,7 +59,7 @@ public class Vector {
     }
 
     /**
-     * getter
+     * getter for the head point
      *
      * @return head
      */
@@ -115,8 +116,10 @@ public class Vector {
     }
 
     /**
-     * @param other Vector
-     * @return dotProduct(double)
+     * func that calculate dotProduct between 2 vectors
+     *
+     * @param other Vector to dotProduct
+     * @return double
      */
     public double dotProduct(Vector other) {
         return head.getX().get() * other.head.getX().get() +
@@ -125,8 +128,10 @@ public class Vector {
     }
 
     /**
-     * @param other Vector
-     * @return Vector for cross product(Vector)
+     * func that calculate crossProduct between 2 vectors
+     *
+     * @param other Vector to crossProduct
+     * @return Vector cross product with (Vector other)
      */
     public Vector crossProduct(Vector other) {
         return new Vector(this.head.getY().get() * other.head.getZ().get() -
@@ -159,6 +164,11 @@ public class Vector {
         return Math.sqrt(this.lengthSquared());
     }
 
+    /**
+     * func to normalize our vector
+     *
+     * @return normalize vector
+     */
     public Vector normalize() {
         double length = this.length();
         if (length == 0)
@@ -170,6 +180,11 @@ public class Vector {
         return this;
     }
 
+    /**
+     * func to normalize vector
+     *
+     * @return normalize vector
+     */
     public Vector normalized() {
         Vector v = new Vector(this);
         v.normalize();

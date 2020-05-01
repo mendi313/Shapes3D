@@ -17,13 +17,13 @@ public class ImageWriterTest {
         ImageWriter imageWriter = new ImageWriter(imageName, width, height, nx, ny);
         for (int col = 0; col < ny; col++) {
             for (int row = 0; row < nx; row++) {
-                    imageWriter.writePixel(row, col, Color.yellow);
+                    imageWriter.writePixel(row, col, Color.blue);
             }
         }
         for (int col = 0; col < ny; col++) {
             for (int row = 0; row < nx; row++) {
                 if (col % 10 == 0 || row % 10 == 0) {
-                    imageWriter.writePixel(row, col, Color.black);
+                    imageWriter.writePixel(row, col, Color.yellow);
                 }
             }
         }

@@ -28,8 +28,10 @@ public class Cylinder extends Tube {
     }
 
     /**
+     * func to calculate the normal
+     *
      * @param point point to calculate the normal
-     * @return normal
+     * @return normal vector
      */
     @Override
     public Vector getNormal(Point3D point) {
@@ -54,12 +56,19 @@ public class Cylinder extends Tube {
 
     /**
      * get the height
+     *
      * @return height
      */
     public double get_height() {
         return _height;
     }
 
+    /**
+     * func to find the Intersections point between the ray and the Cylinder
+     *
+     * @param ray ray pointing toward a Geometry
+     * @return List<Point3D> with the Intersections point
+     */
     @Override
     public List<Point3D> findIntersections(Ray ray) {
         return super.findIntersections(ray);

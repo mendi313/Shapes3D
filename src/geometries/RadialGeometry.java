@@ -8,6 +8,8 @@ import static primitives.Util.isZero;
 public abstract class RadialGeometry implements Geometry {
     double _radius;
 
+    /***************contractors***********/
+
     /**
      * contractor for creating a RadialGeometry
      *
@@ -29,9 +31,9 @@ public abstract class RadialGeometry implements Geometry {
     }
 
     /**
-     * getter
+     * getter for the radios
      *
-     * @return radios
+     * @return radios point
      */
     public double get_radius() {
         return _radius;

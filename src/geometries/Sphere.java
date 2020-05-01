@@ -10,6 +10,8 @@ import static primitives.Util.alignZero;
 public class Sphere extends RadialGeometry {
     private Point3D _center;
 
+    /***************contractors***********/
+
     /**
      * contractor for creating a Sphere
      *
@@ -46,12 +48,24 @@ public class Sphere extends RadialGeometry {
                 '}';
     }
 
+    /**
+     * func to calculate the normal vector
+     *
+     * @param point the point to calculate from her
+     * @return Normal vector
+     */
     @Override
     public Vector getNormal(Point3D point) {
         Vector orthogonal = new Vector(point.subtract(_center));
         return orthogonal.normalized();
     }
 
+    /**
+     * func to find the Intersections point between the ray and the Sphere
+     *
+     * @param ray ray pointing toward a Geometry
+     * @return List<Point3D> with the Intersections point
+     */
     @Override
     public List<Point3D> findIntersections(Ray ray) {
         Point3D p0 = ray.getPoint();

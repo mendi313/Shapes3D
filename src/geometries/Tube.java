@@ -18,6 +18,8 @@ public class Tube extends RadialGeometry {
      */
     protected final Ray _ray;
 
+    /***************contractors***********/
+
     /**
      * constructor for a new Cylinder object
      *
@@ -40,6 +42,8 @@ public class Tube extends RadialGeometry {
     }
 
     /**
+     * getter for the ray
+     *
      * @return ray
      */
     public Ray get_ray() {
@@ -71,6 +75,8 @@ public class Tube extends RadialGeometry {
     }
 
     /**
+     * func to calculate the normal to the tube
+     *
      * @param point point to calculate the normal
      * @return returns normal vector
      */
@@ -94,6 +100,12 @@ public class Tube extends RadialGeometry {
         return check.normalize();
     }
 
+    /**
+     * func to find the Intersections point between the ray and the Tube
+     *
+     * @param ray ray pointing toward a Geometry
+     * @return List<Point3D> with the Intersections point
+     */
     @Override
     public List<Point3D> findIntersections(Ray ray) {
 

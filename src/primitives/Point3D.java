@@ -11,6 +11,7 @@ public class Point3D {
     public static final Point3D ZERO = new Point3D(0.0, 0.0, 0.0);
 
     /***************contractors***********/
+
     /**
      * contractor for creating a point
      *
@@ -47,8 +48,9 @@ public class Point3D {
 
     }
     /****************getters*************/
+
     /**
-     * get x
+     * getter for x
      *
      * @return x
      */
@@ -57,7 +59,7 @@ public class Point3D {
     }
 
     /**
-     * get y
+     * getter for y
      *
      * @return y
      */
@@ -66,7 +68,7 @@ public class Point3D {
     }
 
     /**
-     * get z
+     * getter for z
      *
      * @return z
      */

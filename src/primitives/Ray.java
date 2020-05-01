@@ -6,7 +6,6 @@ import static primitives.Util.isZero;
  * Ray class
  */
 public class Ray {
-
     /**
      * The point from which the ray starts.
      */
@@ -15,6 +14,8 @@ public class Ray {
      * The direction of the ray.
      */
     private final Vector _direction;
+
+    /***************contractors***********/
 
     /**
      * Constructor for creating a new instance of this class
