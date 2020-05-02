@@ -11,6 +11,7 @@ public class Geometries implements Intersectable {
     private List<Intersectable> _geometries = new ArrayList<Intersectable>();
 
     /***************contractors***********/
+
     /**
      * contractors that build List of Geometries
      *
@@ -18,6 +19,26 @@ public class Geometries implements Intersectable {
      */
     public Geometries(Intersectable... _geometries) {
         add(_geometries);
+    }
+
+    /**
+     * contractors that build List of Geometries
+     *
+     * @param intersectables get number of different Geometries
+     */
+    public Geometries(ArrayList<Intersectable> intersectables) {
+        add(intersectables);
+    }
+
+    /**
+     * func to add Geometries to are List
+     *
+     * @param intersectables get different type of Geometries
+     */
+    private void add(ArrayList<Intersectable> intersectables) {
+        for (Intersectable geo : intersectables) {
+            _geometries.add(geo);
+        }
     }
 
     /**
