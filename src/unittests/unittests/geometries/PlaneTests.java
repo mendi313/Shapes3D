@@ -1,5 +1,6 @@
 package unittests.geometries;
 
+import geometries.Intersectable;
 import geometries.Plane;
 import org.junit.Test;
 import primitives.Point3D;
@@ -46,7 +47,7 @@ public class PlaneTests extends Object {
         // ============ Equivalence Partitions Tests ==============
 
         // TC01: Ray intersects the plane  (1 point)
-        List<Point3D> result =  plane.findIntersections(new Ray(new Point3D(0, -1, -2),
+        List<Intersectable.GeoPoint> result =  plane.findIntersections(new Ray(new Point3D(0, -1, -2),
                 new Vector(1, 2, 3)));
         assertEquals("Ray intersects the plane", 1,
                 result.size());

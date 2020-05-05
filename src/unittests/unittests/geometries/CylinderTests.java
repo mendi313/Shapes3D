@@ -1,6 +1,7 @@
 package unittests.geometries;
 
 import geometries.Cylinder;
+import geometries.Intersectable;
 import org.junit.Test;
 import primitives.Point3D;
 import primitives.Ray;
@@ -80,7 +81,7 @@ public class CylinderTests extends Object {
         Point3D p2 = new Point3D(2, 2, 0);
 
         // TC01: Ray's line is outside the cylinder (0 points)
-        List<Point3D> result = cylinder.findIntersections(new Ray(new Point3D(0, 4, 0),
+        List<Intersectable.GeoPoint> result = cylinder.findIntersections(new Ray(new Point3D(0, 4, 0),
                 new Vector(1, 0, 0)));
 
        assertEquals("Ray's line out of cylinder", null, result.size());
@@ -91,7 +92,7 @@ public class CylinderTests extends Object {
 
         assertEquals("Wrong number of points", 2, result.size());
 
-        if (result.get(0).getX().get() > result.get(1).getX().get())
+        if (result.get(0).getPoint().getX().get() > result.get(1).getPoint().getX().get())
             result = List.of(result.get(1), result.get(0));
         assertEquals("Ray crosses cylinder", List.of(p1, p2), result);
 
@@ -117,7 +118,7 @@ public class CylinderTests extends Object {
                 new Vector(0, 1, 0)));
 
         assertEquals("Wrong number of points", 2, result.size());
-        if (result.get(0).getY().get() > result.get(1).getY().get())
+        if (result.get(0).getPoint().getY().get() > result.get(1).getPoint().getY().get())
             result = List.of(result.get(1), result.get(0));
         assertEquals("Ray's crosses the cylinder", List.of(p3, p4), result);
 

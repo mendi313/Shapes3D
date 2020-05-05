@@ -8,7 +8,7 @@ import java.util.List;
 import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
-public class Plane implements Geometry {
+public class Plane extends Geometry {
     Point3D _p;
     Vector _normal;
 
@@ -21,13 +21,22 @@ public class Plane implements Geometry {
      * @param p2 second point
      * @param p3 third point
      */
-    public Plane(Point3D p1, Point3D p2, Point3D p3) {
+    public Plane(Color emissionLight, Material material, Point3D p1, Point3D p2, Point3D p3) {
+        super(emissionLight, material);
         _p = new Point3D(p1);
         Vector U = new Vector(p1, p2);
         Vector V = new Vector(p1, p3);
         Vector N = U.crossProduct(V);
         N.normalize();
         _normal = N;
+    }
+
+    public Plane(Color emissionLight, Point3D p1, Point3D p2, Point3D p3) {
+        this(emissionLight, new Material(0, 0, 0), p1, p2, p3);
+    }
+
+    public Plane(Point3D p1, Point3D p2, Point3D p3) {
+        this(Color.BLACK, p1, p2, p3);
     }
 
     /**
@@ -37,6 +46,7 @@ public class Plane implements Geometry {
      * @param _normal second param
      */
     public Plane(Point3D _p, Vector _normal) {
+        super(Color.BLACK, new Material(0, 0, 0));
         this._p = new Point3D(_p);
         this._normal = new Vector(_normal);
     }
@@ -64,7 +74,7 @@ public class Plane implements Geometry {
      * @return List<Point3D> with the Intersections point
      */
     @Override
-    public List<Point3D> findIntersections(Ray ray) {
+    public List<GeoPoint> findIntersections(Ray ray) {
         Vector p0Q;
         try {
             p0Q = _p.subtract(ray.getPoint());
@@ -78,6 +88,11 @@ public class Plane implements Geometry {
 
         double t = alignZero(_normal.dotProduct(p0Q) / nv);
 
-        return t <= 0 ? null : List.of(ray.getTargetPoint(t));
+        if (t <= 0) {
+            return null;
+        }
+
+        GeoPoint geo = new GeoPoint(this, ray.getTargetPoint(t));
+        return List.of(geo);
     }
 }

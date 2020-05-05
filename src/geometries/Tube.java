@@ -5,6 +5,7 @@ import primitives.*;
 import java.util.List;
 
 import static java.lang.StrictMath.sqrt;
+import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
 /**
@@ -26,19 +27,25 @@ public class Tube extends RadialGeometry {
      * @param _radius the radius of the cylinder
      * @param _ray    the direction of the cylinder from a center point
      */
-    public Tube(double _radius, Ray _ray) {
-        super(_radius);
+    public Tube(Color emissionLight, Material _material, double _radius, Ray _ray) {
+        super(Color.BLACK, _radius);
+        this._material = _material;
         this._ray = new Ray(_ray);
+
     }
 
     /**
-     * copy constructor for a tube object to be deep copied
+     * constructor for a new Cylinder object
      *
-     * @param other the source parameter
+     * @param _radius the radius of the cylinder
+     * @param _ray    the direction of the cylinder from a center point
      */
-    public Tube(Tube other) {
-        super(other);
-        this._ray = new Ray(other._ray);
+    public Tube(double _radius, Ray _ray) {
+        this(Color.BLACK, new Material(0, 0, 0), _radius, _ray);
+    }
+
+    public Tube(Color emissionLight, double _radius, Ray _ray) {
+        this(emissionLight, new Material(0, 0, 0), _radius, _ray);
     }
 
     /**
@@ -103,30 +110,56 @@ public class Tube extends RadialGeometry {
     /**
      * func to find the Intersections point between the ray and the Tube
      *
-     * @param ray ray pointing toward a Geometry
+     * @param anotherray ray pointing toward a Geometry
      * @return List<Point3D> with the Intersections point
      */
     @Override
-    public List<Point3D> findIntersections(Ray ray) {
+    public List<GeoPoint> findIntersections(Ray anotherray) {
+        //TODO implementation
 
-        Vector AB = _ray.getDirection();
-        Vector AO = ray.getPoint().subtract(_ray.getPoint());
-        Vector AOxAB = AO.crossProduct(AB);
-        Vector VxAB = ray.getDirection().crossProduct(AB);
-        double ab2 = AB.dotProduct(AB);
-        double a = VxAB.dotProduct(VxAB);
-        double b = 2 * VxAB.dotProduct(AOxAB);
-        double c = AOxAB.dotProduct(AOxAB) - (_radius * _radius * ab2);
-        double d = b * b - 4 * a * c;
-        if (d < 0)
+        Point3D P = anotherray.getPoint();
+        Point3D _point = this._ray.getPoint();
+
+        Vector V = anotherray.getDirection(),
+                Va = this._ray.getDirection(),
+                DeltaP = new Vector(P.subtract(_point)),
+                temp_for_use1, temp_for_use2;
+
+        double V_dot_Va = V.dotProduct(Va),
+                DeltaP_dot_Va = DeltaP.dotProduct(Va);
+
+        temp_for_use1 = V.subtract(Va.scale(V_dot_Va));
+        temp_for_use2 = DeltaP.subtract(Va.scale(DeltaP_dot_Va));
+
+        double A = temp_for_use1.dotProduct(temp_for_use1);
+        double B = 2 * V.subtract(Va.scale(V_dot_Va)).dotProduct(DeltaP.subtract(Va.scale(DeltaP_dot_Va)));
+        double C = temp_for_use2.dotProduct(temp_for_use2) - _radius * _radius;
+        double desc = alignZero(B * B - 4 * A * C);
+
+        if (desc < 0) {//No solution
             return null;
-        double t1 = (-b - sqrt(d)) / (2 * a);
-        double t2 = (-b + sqrt(d)) / (2 * a);
-        if (t1 <= 0 && t2 <= 0) return null;
-        if (t1 > 0 && t2 > 0) return List.of(ray.getTargetPoint(t1), ray.getTargetPoint(t2)); //P1 , P2
-        if (t1 > 0)
-            return List.of(ray.getTargetPoint(t1));
-        else
-            return List.of(ray.getTargetPoint(t2));
+        }
+
+        double t1 = (-B + Math.sqrt(desc)) / (2 * A),
+                t2 = (-B - Math.sqrt(desc)) / (2 * A);
+
+        if (desc == 0) {//One solution
+            if (-B / (2 * A) < 0) {
+                return null;
+            } else {
+                return List.of(new GeoPoint(this, P.add(V.scale(-B / (2 * A)))));
+            }
+        } else if (t1 < 0 && t2 < 0) {
+            return null;
+        } else if (t1 < 0 && t2 > 0) {
+            return List.of(new GeoPoint(this, P.add(V.scale(t2))));
+        } else if (t1 > 0 && t2 < 0) {
+            return List.of(new GeoPoint(this, P.add(V.scale(t1))));
+        } else {
+            return List.of(
+                    new GeoPoint(this, P.add(V.scale(t1))),
+                    new GeoPoint(this, P.add(V.scale(t2)))
+            );
+        }
     }
 }

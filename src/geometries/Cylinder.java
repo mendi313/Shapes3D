@@ -70,7 +70,13 @@ public class Cylinder extends Tube {
      * @return List<Point3D> with the Intersections point
      */
     @Override
-    public List<Point3D> findIntersections(Ray ray) {
-        return super.findIntersections(ray);
+    public List<GeoPoint> findIntersections(Ray ray) {
+        List<GeoPoint> intersections = super.findIntersections(ray);
+        if (intersections != null) {
+            for (GeoPoint geoPoint : intersections) {
+                geoPoint._geometry = this;
+            }
+        }
+        return intersections;
     }
 }

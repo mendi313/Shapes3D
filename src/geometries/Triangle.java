@@ -1,8 +1,6 @@
 package geometries;
 
-import primitives.Point3D;
-import primitives.Ray;
-import primitives.Vector;
+import primitives.*;
 
 import java.util.List;
 
@@ -21,6 +19,14 @@ public class Triangle extends Polygon {
      */
     public Triangle(Point3D p1, Point3D p2, Point3D p3) {
         super(p1, p2, p3);
+    }
+
+    public Triangle(Color emissionLight, Point3D p1, Point3D p2, Point3D p3) {
+        super(emissionLight,p1, p2, p3);
+    }
+
+    public Triangle(Color emissionLight, Material material, Point3D p1, Point3D p2, Point3D p3) {
+        super(emissionLight,material,p1,p2,p3);
     }
 
     @Override
@@ -50,8 +56,8 @@ public class Triangle extends Polygon {
      * @return List<Point3D> with the Intersections point
      */
     @Override
-    public List<Point3D> findIntersections(Ray ray) {
-        List<Point3D> intersections = _plane.findIntersections(ray);
+    public List<GeoPoint> findIntersections(Ray ray) {
+        List<GeoPoint> intersections = _plane.findIntersections(ray);
         if (intersections == null) return null;
 
         Point3D p0 = ray.getPoint();
@@ -67,6 +73,9 @@ public class Triangle extends Polygon {
         if (isZero(s2)) return null;
         double s3 = v.dotProduct(v3.crossProduct(v1));
         if (isZero(s3)) return null;
+
+        //for GeoPoint
+        intersections.get(0)._geometry = this;
 
         return ((s1 > 0 && s2 > 0 && s3 > 0) || (s1 < 0 && s2 < 0 && s3 < 0)) ? intersections : null;
 

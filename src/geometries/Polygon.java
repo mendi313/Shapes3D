@@ -9,9 +9,8 @@ import static primitives.Util.*;
 /**
  * Polygon class represents two-dimensional polygon in 3D Cartesian coordinate
  * system
- *
  */
-public class Polygon implements Geometry {
+public class Polygon extends Geometry {
     /**
      * List of polygon's vertices
      */
@@ -42,7 +41,9 @@ public class Polygon implements Geometry {
      *                                  <li>The polygon is concave (not convex)</li>
      *                                  </ul>
      */
-    public Polygon(Point3D... vertices) {
+    public Polygon(Color emissionLight, Material material, Point3D... vertices) {
+        super(emissionLight, material);
+
         if (vertices.length < 3)
             throw new IllegalArgumentException("A polygon can't have less than 3 vertices");
         _vertices = List.of(vertices);
@@ -81,6 +82,14 @@ public class Polygon implements Geometry {
         }
     }
 
+    public Polygon(Color emissionLight, Point3D... vertices) {
+        this(emissionLight, new Material(0, 0, 0), vertices);
+    }
+
+    public Polygon(Point3D... vertices) {
+        this(Color.BLACK, new Material(0, 0, 0), vertices);
+    }
+
     /**
      * @param point get the point to calculate the normal
      * @return normal vector
@@ -97,14 +106,15 @@ public class Polygon implements Geometry {
      * @return List<Point3D> with the Intersections point
      */
     @Override
-    public List<Point3D> findIntersections(Ray ray) {
-        List<Point3D> intersections = _plane.findIntersections(ray);
-        if (intersections == null) return null;
+    public List<GeoPoint> findIntersections(Ray ray) {
+        List<GeoPoint> intersections = _plane.findIntersections(ray);
+        if (intersections == null)
+            return null;
 
         Point3D p0 = ray.getPoint();
         Vector v = ray.getDirection();
 
-        Vector v1 = _vertices.get(1).subtract(p0);
+        Vector v1  = _vertices.get(1).subtract(p0);
         Vector v2 = _vertices.get(0).subtract(p0);
         double sign = v.dotProduct(v1.crossProduct(v2));
         if (isZero(sign))
@@ -117,8 +127,10 @@ public class Polygon implements Geometry {
             v2 = _vertices.get(i).subtract(p0);
             sign = alignZero(v.dotProduct(v1.crossProduct(v2)));
             if (isZero(sign)) return null;
-            if (positive != (sign > 0)) return null;
+            if (positive != (sign >0)) return null;
         }
+
+        intersections.get(0)._geometry = this;
 
         return intersections;
     }

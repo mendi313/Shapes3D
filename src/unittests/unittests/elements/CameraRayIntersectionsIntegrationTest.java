@@ -1,6 +1,7 @@
 package unittests.elements;
 
 import elements.Camera;
+import geometries.Intersectable;
 import geometries.Plane;
 import geometries.Sphere;
 import geometries.Triangle;
@@ -20,7 +21,7 @@ public class CameraRayIntersectionsIntegrationTest {
     public void CameraRaySphereIntegration() {
 
         Sphere sphere;
-        List<Point3D> intersections;
+        List<Intersectable.GeoPoint> intersections;
         int count;
 
         // TC01 small Sphere 2 points
@@ -85,7 +86,7 @@ public class CameraRayIntersectionsIntegrationTest {
         Plane plane;
         // TC01 stand Plane 9 points
         plane = new Plane(new Point3D(0, 0, 2), new Vector(0, 0, -1));
-        List<Point3D> intersections;
+        List<Intersectable.GeoPoint> intersections;
         int count = 0;
         for (int i = 0; i < 3; ++i)
             for (int j = 0; j < 3; ++j) {
@@ -123,7 +124,7 @@ public class CameraRayIntersectionsIntegrationTest {
         Triangle triangle;
         // TC01 small triangle 1 points
         triangle = new Triangle(new Point3D(0, -1, 2), new Point3D(1, 1, 2), new Point3D(-1, 1, 2));
-        List<Point3D> intersections;
+        List<Intersectable.GeoPoint> intersections;
         int count = 0;
         for (int i = 0; i < 3; ++i)
             for (int j = 0; j < 3; ++j) {
