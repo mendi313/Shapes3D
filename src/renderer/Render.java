@@ -7,7 +7,10 @@ import primitives.*;
 import geometries.Intersectable.GeoPoint;
 
 import scene.Scene;
+
 import java.util.List;
+
+import static primitives.Util.alignZero;
 
 public class Render {
     private Scene _scene;
@@ -131,45 +134,72 @@ public class Render {
     /**
      * Calculate the color intensity in a point
      *
-     * @param intersection the point for which the color is required
+     * @param gp the point for which the color is required
      * @return the color intensity
      */
-    private Color calcColor(GeoPoint intersection) {
-        Color resultColor;
-        Color ambientLight = _scene.getAmbientLight().getIntensity();
-        Color emissionLight = intersection.getGeometry().getEmissionLight();
-        List<LightSource> lights = _scene.getLightSources();
+    private Color calcColor(GeoPoint gp) {
+        Color result = new Color(_scene.getAmbientLight().getIntensity());
+        result = result.add(gp.getGeometry().getEmissionLight());
 
-        resultColor = ambientLight;
-        resultColor = resultColor.add(emissionLight);
+        Vector v = gp.getPoint().subtract(_scene.getCamera().get_p0()).normalize();
+        Vector n = gp.getGeometry().getNormal(gp.getPoint());
 
-        Vector v = intersection.getPoint().subtract(_scene.getCamera().get_p0()).normalize();
-        Vector n = intersection.getGeometry().getNormal(intersection.getPoint());
-        Material material = intersection.getGeometry().getMaterial();
-
+        Material material = gp.getGeometry().getMaterial();
         int nShininess = material.getnShininess();
         double kd = material.getkD();
         double ks = material.getkS();
+        if (_scene.getLightSources() != null) {
+            for (LightSource lightSource : _scene.getLightSources()) {
 
-        if (lights != null) {
-            for (LightSource lightSource : lights) {
-                Vector l = lightSource.getL(intersection.getPoint());
-                if (sign(n.dotProduct(l)) == sign(n.dotProduct(v))) {
-                    Color lightIntensity = lightSource.getIntensity(intersection.getPoint());
-                    resultColor = resultColor.add(calcDiffusive(kd, l, n, lightIntensity), calcSpecular(ks, l, n, v, nShininess, lightIntensity));
+                Vector l = lightSource.getL(gp.getPoint());
+                double nl = alignZero(n.dotProduct(l));
+                double nv = alignZero(n.dotProduct(v));
+
+                if (sign(nl) == sign(nv)) {
+                    Color ip = lightSource.getIntensity(gp.getPoint());
+                    result = result.add(
+                            calcDiffusive(kd, nl, ip),
+                            calcSpecular(ks, l, n, nl, v, nShininess, ip)
+                    );
                 }
             }
         }
 
-        return resultColor;
+        return result;
     }
 
-    private Color calcSpecular(double ks, Vector l, Vector n, Vector v, int nShininess, Color lightIntensity) {
-        return Color.BLACK;
+    /**
+     * Calculate Specular component of light reflection.
+     *
+     * @param ks         specular component coef
+     * @param l          direction from light to point
+     * @param n          normal to surface at the point
+     * @param nl         dot-product n*l
+     * @param v          direction from point of view to point
+     * @param nShininess shininess level
+     * @param ip         light intensity at the point
+     * @return specular component light effect at the point
+     * @author Dan Zilberstein
+     */
+    private Color calcSpecular(double ks, Vector l, Vector n, double nl, Vector v, int nShininess, Color ip) {
+        Vector r = l.add(n.scale(-2 * nl)); // nl must not be zero!
+        double minusVR = -alignZero(r.dotProduct(v));
+        if (minusVR <= 0) return Color.BLACK; // view from direction opposite to r vector
+        return ip.scale(ks * Math.pow(minusVR, nShininess));
     }
 
-    private Color calcDiffusive(double kd, Vector l, Vector n, Color lightIntensity) {
-        return Color.BLACK;
+    /**
+     * Calculate Diffusive component of light reflection.
+     *
+     * @param kd diffusive component coef
+     * @param nl dot-product n*l
+     * @param ip light intensity at the point
+     * @return diffusive component of light reflection
+     * @author Dan Zilberstein
+     */
+    private Color calcDiffusive(double kd, double nl, Color ip) {
+        if (nl < 0) nl = -nl;
+        return ip.scale(nl * kd);
     }
 
     private boolean sign(double val) {
