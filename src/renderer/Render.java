@@ -179,7 +179,6 @@ public class Render {
      * @param nShininess shininess level
      * @param ip         light intensity at the point
      * @return specular component light effect at the point
-     * @author Dan Zilberstein
      */
     private Color calcSpecular(double ks, Vector l, Vector n, double nl, Vector v, int nShininess, Color ip) {
         Vector r = l.add(n.scale(-2 * nl)); // nl must not be zero!
@@ -195,7 +194,6 @@ public class Render {
      * @param nl dot-product n*l
      * @param ip light intensity at the point
      * @return diffusive component of light reflection
-     * @author Dan Zilberstein
      */
     private Color calcDiffusive(double kd, double nl, Color ip) {
         if (nl < 0) nl = -nl;
