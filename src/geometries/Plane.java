@@ -17,9 +17,11 @@ public class Plane extends Geometry {
     /**
      * contractors that build the plane by 3 points
      *
-     * @param p1 first point
-     * @param p2 second point
-     * @param p3 third point
+     * @param emissionLight the emissionLight of the Plane
+     * @param material      the attenuation
+     * @param p1            first point for creating a Plane
+     * @param p2            second point for creating a Plane
+     * @param p3            third point for creating a Plane
      */
     public Plane(Color emissionLight, Material material, Point3D p1, Point3D p2, Point3D p3) {
         super(emissionLight, material);
@@ -31,10 +33,27 @@ public class Plane extends Geometry {
         _normal = N;
     }
 
+    /**
+     * contractors that build the plane by 3 points,
+     * with default Values for the kd, ks and nShininess.
+     *
+     * @param emissionLight the emissionLight of the Plane
+     * @param p1            first point for creating a Plane
+     * @param p2            second point for creating a Plane
+     * @param p3            third point for creating a Plane
+     */
     public Plane(Color emissionLight, Point3D p1, Point3D p2, Point3D p3) {
         this(emissionLight, new Material(0, 0, 0), p1, p2, p3);
     }
 
+    /**
+     * contractors that build the plane by 3 points,
+     * with default Values for the kd, ks, emissionLight, and nShininess.
+     *
+     * @param p1 first point for creating a Plane
+     * @param p2 second point for creating a Plane
+     * @param p3 third point for creating a Plane
+     */
     public Plane(Point3D p1, Point3D p2, Point3D p3) {
         this(Color.BLACK, p1, p2, p3);
     }
@@ -71,7 +90,7 @@ public class Plane extends Geometry {
      * func to find the Intersections point between the ray and the Plane
      *
      * @param ray ray pointing toward a Geometry
-     * @return List<Point3D> with the Intersections point
+     * @return List<GeoPoint> with the Intersections point
      */
     @Override
     public List<GeoPoint> findIntersections(Ray ray) {

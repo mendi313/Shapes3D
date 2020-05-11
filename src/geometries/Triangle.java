@@ -13,20 +13,37 @@ public class Triangle extends Polygon {
     /**
      * contractor for creating a using tje father polygon
      *
-     * @param p1 first param
-     * @param p2 second param
-     * @param p3 third param
+     * @param p1 first point to build a triangle
+     * @param p2 second point to build a triangle
+     * @param p3 third point to build a triangle
      */
     public Triangle(Point3D p1, Point3D p2, Point3D p3) {
         super(p1, p2, p3);
     }
 
+    /**
+     * constructor for a new Triangle object with default Values for the kd, ks, and nShininess
+     *
+     * @param emissionLight the emissionLight of the triangle
+     * @param p1            first point to build a triangle
+     * @param p2            second point to build a triangle
+     * @param p3            third point to build a triangle
+     */
     public Triangle(Color emissionLight, Point3D p1, Point3D p2, Point3D p3) {
-        super(emissionLight,p1, p2, p3);
+        super(emissionLight, p1, p2, p3);
     }
 
+    /**
+     *  * constructor for a new Triangle object
+     *
+     * @param emissionLight the emissionLight of the triangle
+     * @param material      the attenuation
+     * @param p1            first point to build a triangle
+     * @param p2            second point to build a triangle
+     * @param p3            third point to build a triangle
+     */
     public Triangle(Color emissionLight, Material material, Point3D p1, Point3D p2, Point3D p3) {
-        super(emissionLight,material,p1,p2,p3);
+        super(emissionLight, material, p1, p2, p3);
     }
 
     @Override
@@ -53,7 +70,7 @@ public class Triangle extends Polygon {
      * func to find the Intersections point between the ray and the Triangle
      *
      * @param ray ray pointing toward a Geometry
-     * @return List<Point3D> with the Intersections point
+     * @return List<GeoPoint> with the Intersections point
      */
     @Override
     public List<GeoPoint> findIntersections(Ray ray) {

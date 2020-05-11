@@ -22,20 +22,22 @@ public class Tube extends RadialGeometry {
     /***************contractors***********/
 
     /**
-     * constructor for a new Cylinder object
+     * constructor for a new Tube object
      *
-     * @param _radius the radius of the cylinder
-     * @param _ray    the direction of the cylinder from a center point
+     * @param _radius       the radius of the cylinder
+     * @param _ray          the direction of the cylinder from a center point
+     * @param emissionLight the emissionLight of the Tube
+     * @param _material     the attenuation
      */
     public Tube(Color emissionLight, Material _material, double _radius, Ray _ray) {
-        super(Color.BLACK, _radius);
+        super(emissionLight, _radius);
         this._material = _material;
         this._ray = new Ray(_ray);
 
     }
 
     /**
-     * constructor for a new Cylinder object
+     * constructor for a new Tube object with default Values for the kd, ks, emissionLight, and nShininess.
      *
      * @param _radius the radius of the cylinder
      * @param _ray    the direction of the cylinder from a center point
@@ -44,6 +46,13 @@ public class Tube extends RadialGeometry {
         this(Color.BLACK, new Material(0, 0, 0), _radius, _ray);
     }
 
+    /**
+     * constructor for a new Tube object with default Values for the kd, ks, and nShininess.
+     *
+     * @param emissionLight the emissionLight of the Tube
+     * @param _radius       the radius of the cylinder
+     * @param _ray          the direction of the cylinder from a center point
+     */
     public Tube(Color emissionLight, double _radius, Ray _ray) {
         this(emissionLight, new Material(0, 0, 0), _radius, _ray);
     }
@@ -111,12 +120,10 @@ public class Tube extends RadialGeometry {
      * func to find the Intersections point between the ray and the Tube
      *
      * @param anotherray ray pointing toward a Geometry
-     * @return List<Point3D> with the Intersections point
+     * @return List<GeoPoint> with the Intersections point
      */
     @Override
     public List<GeoPoint> findIntersections(Ray anotherray) {
-        //TODO implementation
-
         Point3D P = anotherray.getPoint();
         Point3D _point = this._ray.getPoint();
 

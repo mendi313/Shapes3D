@@ -1,8 +1,6 @@
 package geometries;
 
-import primitives.Point3D;
-import primitives.Ray;
-import primitives.Vector;
+import primitives.*;
 
 import java.util.List;
 
@@ -16,14 +14,42 @@ public class Cylinder extends Tube {
     private double _height;
 
     /**
-     * Cylinder constructor
+     * Cylinder constructor with default Values for the kd, ks, emissionLight, and nShininess.
      *
-     * @param _radius first param
-     * @param _ray    second param
-     * @param _height third param
+     * @param _radius the radius of the Cylinder
+     * @param _ray    the ray that we build around her the Cylinder
+     * @param _height the height og the Cylinder
      */
     public Cylinder(double _radius, Ray _ray, double _height) {
-        super(_radius, _ray);
+        super(Color.BLACK, new Material(0, 0, 0), _radius, _ray);
+        this._height = _height;
+
+
+    }
+
+    /**
+     * Cylinder constructor with default Values for the kd, ks and nShininess.
+     *
+     * @param emissionLight the emissionLight of the Cylinder
+     * @param _radius       the radius of the Cylinder
+     * @param _ray          the ray that we build around her the Cylinder
+     * @param _height       the height og the Cylinder
+     */
+    public Cylinder(Color emissionLight, double _radius, Ray _ray, double _height) {
+        super(emissionLight, new Material(0, 0, 0), _radius, _ray);
+        this._height = _height;
+    }
+
+    /**
+     * @param emissionLight the emissionLight of the Cylinder
+     * @param _material     the attenuation
+     * @param _radius       the radius of the Cylinder
+     * @param _ray          the ray that we build around her the Cylinder
+     * @param _height       the height og the Cylinder
+     */
+    public Cylinder(Color emissionLight, Material _material, double _radius, Ray _ray, double _height) {
+        super(emissionLight, _radius, _ray);
+        this._material = _material;
         this._height = _height;
     }
 

@@ -200,6 +200,11 @@ public class Render {
         return ip.scale(nl * kd);
     }
 
+    /**
+     * help func for knowing witch one bigger
+     * @param val the param that we wont to know
+     * @return true or false
+     */
     private boolean sign(double val) {
         return (val > 0d);
     }

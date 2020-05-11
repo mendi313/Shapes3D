@@ -56,7 +56,7 @@ public class Geometries implements Intersectable {
      * func to find the Intersections point between the ray and the Geometries
      *
      * @param ray to findIntersections
-     * @return list of Point3D that intersect the set of Geometries
+     * @return list of GeoPoint that intersect the set of Geometries
      */
     @Override
     public List<GeoPoint> findIntersections(Ray ray) {

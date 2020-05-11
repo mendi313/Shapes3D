@@ -7,7 +7,7 @@ public class AmbientLight extends Light {
     /***************contractors***********/
 
     /**
-     * contractor for holding the AmbientLight
+     * contractor for calculate and holding the AmbientLight
      *
      * @param _intensity the color that we wont
      * @param ka         for the clarity

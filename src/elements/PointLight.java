@@ -10,6 +10,17 @@ public class PointLight extends Light implements LightSource {
     double _kL;
     double _kQ;
 
+    /***************contractors***********/
+
+    /**
+     * Initialize Point light with it's intensity and position
+     *
+     * @param colorIntensity get the color Intensity
+     * @param _position      get the position of the spot
+     * @param _kC            factors for attenuation with distance
+     * @param _kL            factors for attenuation with distance
+     * @param _kQ            factors for attenuation with distance
+     */
     public PointLight(Color colorIntensity, Point3D _position, double _kC, double _kL, double _kQ) {
         this._intensity = colorIntensity;
         this._position = new Point3D(_position);
@@ -19,6 +30,12 @@ public class PointLight extends Light implements LightSource {
 
     }
 
+    /**
+     * getter for the Intensity that calculate the affect of the pointLight on the point
+     *
+     * @param p The bright spot
+     * @return intensity of the pointLight
+     */
     @Override
     public Color getIntensity(Point3D p) {
         double dsquared = p.distanceSquared(_position);
@@ -29,6 +46,7 @@ public class PointLight extends Light implements LightSource {
         return IL;
     }
 
+    //instead of getDirection()
     @Override
     public Vector getL(Point3D p) {
         if (p.equals(_position)) {

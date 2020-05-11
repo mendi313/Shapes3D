@@ -14,7 +14,8 @@ public abstract class RadialGeometry extends Geometry {
     /**
      * contractor for creating a RadialGeometry
      *
-     * @param _radius get radios for contractor
+     * @param emissionLight get the emissionLight of the Radial
+     * @param _radius       the radius of the Radial
      */
     public RadialGeometry(Color emissionLight, double _radius) {
         super(emissionLight);

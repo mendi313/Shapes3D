@@ -24,7 +24,9 @@ public class Polygon extends Geometry {
      * Polygon constructor based on vertices list. The list must be ordered by edge
      * path. The polygon must be convex.
      *
-     * @param vertices list of vertices according to their order by edge path
+     * @param emissionLight the emissionLight of the Polygon
+     * @param material      the attenuation
+     * @param vertices      list of vertices according to their order by edge path
      * @throws IllegalArgumentException in any case of illegal combination of
      *                                  vertices:
      *                                  <ul>
@@ -82,10 +84,23 @@ public class Polygon extends Geometry {
         }
     }
 
+    /**
+     * Polygon constructor based on vertices list,
+     * with default Values for the kd, ks and nShininess
+     *
+     * @param emissionLight the emissionLight of the Polygon
+     * @param vertices      list of vertices according to their order by edge path
+     */
     public Polygon(Color emissionLight, Point3D... vertices) {
         this(emissionLight, new Material(0, 0, 0), vertices);
     }
 
+    /**
+     * Polygon constructor based on vertices list,
+     * with default Values for the kd, ks, emissionLight, and nShininess.
+     *
+     * @param vertices list of vertices according to their order by edge path
+     */
     public Polygon(Point3D... vertices) {
         this(Color.BLACK, new Material(0, 0, 0), vertices);
     }
@@ -103,7 +118,7 @@ public class Polygon extends Geometry {
      * func to find the Intersections point between the ray and the Polygon
      *
      * @param ray ray pointing toward a Geometry
-     * @return List<Point3D> with the Intersections point
+     * @return List<GeoPoint> with the Intersections point
      */
     @Override
     public List<GeoPoint> findIntersections(Ray ray) {
@@ -114,7 +129,7 @@ public class Polygon extends Geometry {
         Point3D p0 = ray.getPoint();
         Vector v = ray.getDirection();
 
-        Vector v1  = _vertices.get(1).subtract(p0);
+        Vector v1 = _vertices.get(1).subtract(p0);
         Vector v2 = _vertices.get(0).subtract(p0);
         double sign = v.dotProduct(v1.crossProduct(v2));
         if (isZero(sign))
@@ -127,7 +142,7 @@ public class Polygon extends Geometry {
             v2 = _vertices.get(i).subtract(p0);
             sign = alignZero(v.dotProduct(v1.crossProduct(v2)));
             if (isZero(sign)) return null;
-            if (positive != (sign >0)) return null;
+            if (positive != (sign > 0)) return null;
         }
 
         intersections.get(0)._geometry = this;
