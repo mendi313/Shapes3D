@@ -129,6 +129,11 @@ public class Scene {
         }
     }
 
+    /**
+     * add func to add LightSource to the Scene
+     *
+     * @param light get the LightSources
+     */
     public void addLights(LightSource light) {
         if (_lights == null) {
             _lights = new ArrayList<>();
@@ -136,6 +141,11 @@ public class Scene {
         _lights.add(light);
     }
 
+    /**
+     * getter for the LightSources
+     *
+     * @return LightSource
+     */
     public List<LightSource> getLightSources() {
         return _lights;
     }
