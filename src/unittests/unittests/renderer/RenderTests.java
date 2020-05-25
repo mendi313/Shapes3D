@@ -27,7 +27,6 @@ public class RenderTests {
         scene.setDistance(100);
         scene.setBackground(new Color(75, 127, 90));
         scene.setAmbientLight(new AmbientLight(new Color(255, 191, 191), 1d));
-
         scene.addGeometries(new Sphere(50, new Point3D(0, 0, 100)));
 
         scene.addGeometries(

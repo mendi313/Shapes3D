@@ -123,7 +123,9 @@ public class Tube extends RadialGeometry {
      * @return List<GeoPoint> with the Intersections point
      */
     @Override
-    public List<GeoPoint> findIntersections(Ray anotherray) {
+    public List<GeoPoint> findIntersections(Ray anotherray, double maxDistance) {
+        //TODO implementation
+
         Point3D P = anotherray.getPoint();
         Point3D _point = this._ray.getPoint();
 

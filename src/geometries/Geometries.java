@@ -5,6 +5,7 @@ import primitives.Ray;
 
 import javax.print.DocFlavor;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Geometries implements Intersectable {
@@ -59,18 +60,19 @@ public class Geometries implements Intersectable {
      * @return list of GeoPoint that intersect the set of Geometries
      */
     @Override
-    public List<GeoPoint> findIntersections(Ray ray) {
+    public List<GeoPoint> findIntersections(Ray ray, double maxDistance) {
         List<GeoPoint> intersections = null;
 
         for (Intersectable geo : _geometries) {
-            List<GeoPoint> tempIntersections = geo.findIntersections(ray);
+            List<GeoPoint> tempIntersections = geo.findIntersections(ray, maxDistance);
             if (tempIntersections != null) {
                 if (intersections == null)
-                    intersections = new ArrayList<>();
+                    intersections = new LinkedList<>();
                 intersections.addAll(tempIntersections);
             }
         }
         return intersections;
+
     }
 
     /**

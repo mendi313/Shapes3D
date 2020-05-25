@@ -30,6 +30,15 @@ public class PointLight extends Light implements LightSource {
 
     }
 
+    public PointLight(Color colorIntensity, Point3D position) {
+        this(colorIntensity, position, 1d, 0d, 0d);
+    }
+
+    @Override
+    public Color getIntensity() {
+        return super.getIntensity();
+    }
+
     /**
      * getter for the Intensity that calculate the affect of the pointLight on the point
      *
@@ -41,9 +50,7 @@ public class PointLight extends Light implements LightSource {
         double dsquared = p.distanceSquared(_position);
         double d = p.distance(_position);
 
-        Color IL = _intensity.reduce(_kC + d * _kL + dsquared * _kQ);
-
-        return IL;
+        return (_intensity.reduce(_kC + _kL * d + _kQ * dsquared));
     }
 
     //instead of getDirection()
@@ -54,5 +61,10 @@ public class PointLight extends Light implements LightSource {
         } else {
             return p.subtract(_position).normalize();
         }
+    }
+
+    @Override
+    public double getDistance(Point3D point) {
+        return _position.distance(point);
     }
 }

@@ -2,10 +2,12 @@ package elements;
 
 import primitives.Color;
 import primitives.Point3D;
+import primitives.Util;
 import primitives.Vector;
 
 public class SpotLight extends PointLight {
     Vector _direction;
+    double _concentration;
 
     /***************contractors***********/
 
@@ -19,28 +21,37 @@ public class SpotLight extends PointLight {
      * @param _kL            factors for attenuation with distance
      * @param _kQ            factors for attenuation with distance
      */
-    public SpotLight(Color colorIntensity, Point3D _position, Vector _direction, double _kC, double _kL, double _kQ) {
-        super(colorIntensity, _position, _kC, _kL, _kQ);
-        this._direction = new Vector(_direction).normalized();
+    public SpotLight(Color colorIntensity, Point3D position, Vector direction, double kC, double kL, double kQ, double concentration) {
+        super(colorIntensity, position, kC, kL, kQ);
+        this._direction = new Vector(direction).normalized();
+        this._concentration = concentration;
     }
 
-    /**
-     * getter for the Intensity that calculate the affect of the spot on the point
-     *
-     * @param p The bright spot
-     * @return the color in the point
-     */
+    public SpotLight(Color colorIntensity, Point3D position, Vector direction, double kC, double kL, double kQ) {
+        this(colorIntensity, position, direction, kC, kL, kQ, 1);
+    }
+
+
+        /**
+         * getter for the Intensity that calculate the affect of the spot on the point
+         *
+         * @param p The bright spot
+         * @return the color in the point
+         */
     @Override
     public Color getIntensity(Point3D p) {
-        Color pointLightIntensity = super.getIntensity(p);
         double projection = _direction.dotProduct(getL(p));
-        Color IL = pointLightIntensity.scale(Math.max(0, projection));
-        return IL;
-    }
 
-    //instead of getDirection()
-    @Override
-    public Vector getL(Point3D p) {
-        return _direction;
+        if (Util.isZero(projection)) {
+            return Color.BLACK;
+        }
+        double factor = Math.max(0, projection);
+        Color pointlightIntensity = super.getIntensity(p);
+
+        if (_concentration != 1) {
+            factor = Math.pow(factor, _concentration);
+        }
+
+        return (pointlightIntensity.scale(factor));
     }
 }

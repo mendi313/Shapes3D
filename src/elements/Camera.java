@@ -83,7 +83,7 @@ public class Camera {
      *
      * @return the location point
      */
-    public Point3D get_p0() {
+    public Point3D getP0() {
         return new Point3D(_p0);
     }
 

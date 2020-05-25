@@ -6,6 +6,16 @@ import primitives.Ray;
 import java.util.List;
 
 public interface Intersectable {
+
+    /**
+     * @param ray ray pointing toward a Gepmtry
+     * @return List<GeoPoint> return values
+     */
+    default List<GeoPoint> findIntersections(Ray ray) {
+        return findIntersections(ray, Double.POSITIVE_INFINITY);
+    }
+
+    List<GeoPoint> findIntersections(Ray ray, double maxDistance);
     /**
      * assistance class to know when we have intersection point to
      * witch geometries she belong
@@ -23,6 +33,7 @@ public interface Intersectable {
          * @param _geometry the geometry that crossed
          * @param pt        the intersection point
          */
+
         public GeoPoint(Geometry _geometry, Point3D pt) {
             this._geometry = _geometry;
             point = pt;
@@ -53,10 +64,4 @@ public interface Intersectable {
             return super.equals(obj);
         }
     }
-
-    /**
-     * @param ray ray pointing toward a Geometry
-     * @return List of Point3D return values
-     */
-    List<GeoPoint> findIntersections(Ray ray);
 }

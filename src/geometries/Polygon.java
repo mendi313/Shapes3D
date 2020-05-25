@@ -1,5 +1,6 @@
 package geometries;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import primitives.*;
@@ -121,9 +122,9 @@ public class Polygon extends Geometry {
      * @return List<GeoPoint> with the Intersections point
      */
     @Override
-    public List<GeoPoint> findIntersections(Ray ray) {
-        List<GeoPoint> intersections = _plane.findIntersections(ray);
-        if (intersections == null)
+    public List<GeoPoint> findIntersections(Ray ray, double maxDistance) {
+        List<GeoPoint> planeIntersections = _plane.findIntersections(ray, maxDistance);
+        if (planeIntersections == null)
             return null;
 
         Point3D p0 = ray.getPoint();
@@ -145,8 +146,11 @@ public class Polygon extends Geometry {
             if (positive != (sign > 0)) return null;
         }
 
-        intersections.get(0)._geometry = this;
-
-        return intersections;
+        //for GeoPoint
+        List<GeoPoint> result = new LinkedList<>();
+        for (GeoPoint geo : planeIntersections) {
+            result.add(new GeoPoint(this, geo.getPoint()));
+        }
+        return result;
     }
 }
