@@ -1,44 +1,27 @@
 package primitives;
 
 public class Material {
-    private final double _kD; // 0
-    private final double _kS; // 0
-    private final int _nShininess;  // 1
-    private final double _kT; // 0
-    private final double _kR; // 0
+    private final double _kD;
+    private final double _kS;
+    private final int _nShininess;
+    private final double _kr;
+    private final double _kt;
 
-    /**
-     * @param kD         The parameter that represents the diffusion factor of the material.
-     * @param kS         The parameter that represents the specularity factor of the material.
-     * @param nShininess The parameter that represents the shininess of the material.
-     * @param kR         Represents how much the object is reflective.
-     * @param kT         Represents the transparency of the object.
-     */
-    public Material(double kD, double kS, int nShininess, double kR, double kT) {
-        if (nShininess < 1) {
-            nShininess = 1;
-        }
+
+    public Material(double kD, double kS, int nShininess, double kt, double kr) {
         this._kD = kD;
         this._kS = kS;
         this._nShininess = nShininess;
-        this._kR = kR;
-        this._kT = kT;
-    }
-
-    public Material() {
-        this(0d, 0d, 1, 0d, 0d);
+        this._kt = kt;
+        this._kr = kr;
     }
 
     public Material(double kD, double kS, int nShininess) {
-        this(kD, kS, nShininess, 0d, 0d);
+        this(kD, kS, nShininess, 0, 0);
     }
 
-    public double getKd() {
-        return _kD;
-    }
-
-    public double getKs() {
-        return _kS;
+    public Material(Material material) {
+        this(material._kD, material._kS, material._nShininess, material._kt, material._kr);
     }
 
     public int getnShininess() {
@@ -53,11 +36,11 @@ public class Material {
         return _kS;
     }
 
-    public double getKt() {
-        return _kT;
+    public double getKr() {
+        return _kr;
     }
 
-    public double getKr() {
-        return _kR;
+    public double getKt() {
+        return _kt;
     }
 }
