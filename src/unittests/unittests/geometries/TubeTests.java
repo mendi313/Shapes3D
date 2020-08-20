@@ -1,99 +1,366 @@
 package unittests.geometries;
 
 import geometries.Intersectable;
-import geometries.Sphere;
 import geometries.Tube;
 import org.junit.Test;
-import primitives.Coordinate;
 import primitives.Point3D;
 import primitives.Ray;
 import primitives.Vector;
-
 import java.util.List;
 
 import static org.junit.Assert.*;
-
 /**
  * Testing Tube
  */
-public class TubeTests extends Object {
+
+public class TubeTests {
+
     /**
-     * Test method for
-     * {@link geometries.Tube#getNormal(primitives.Point3D)}.
+     * Test method for {@link geometries.Tube#getNormal(primitives.Point3D)}.
      */
-
-    // ============ Equivalence Partitions Tests ==============
     @Test
-    public void getNormal() {
-
+    public void testGetNormal() {
         // ============ Equivalence Partitions Tests ==============
-        //Test simple Tube
-        Ray r = new Ray(new Point3D(0, 1, 0), new Vector(0, 1, 0));
-        Tube t1 = new Tube(4, r);
-
-        assertEquals("not good normal", new Vector(1, 0, 0), t1.getNormal(new Point3D(4, 0, 0)));
-
-        //another Test
-        Ray r1 = new Ray(Point3D.ZERO, new Vector(1, 1, 0));
-        Tube t2 = new Tube(2, r1);
-        assertEquals("", new Vector(0, 0, 1), t2.getNormal(new Point3D(2, 2, 2)));
-
-        // =============== Boundary Values Tests ==================
-
-        //Test point null
-        try {
-            t2.getNormal(null);
-        } catch (Exception e) {
-            assertTrue(e instanceof NullPointerException);
-        }
+        // TC01: There is a simple single test here
+        Tube tube = new Tube(1.0, new Ray(new Point3D(0, 0, 1), new Vector(0, 1, 0)));
+        assertEquals("Bad normal to tube", new Vector(0, 0, 1), tube.getNormal(new Point3D(0, 0.5, 2)));
     }
 
+    /**
+     * Test method for {@link geometries.Tube#findIntersections(primitives.Ray)}.
+     */
     @Test
-    public void testFindIntersections() {
-        Ray ray = new Ray(new Point3D(1, 0, 0), new Vector(0, 1, 0));
-        Point3D p1 = new Point3D(0, 2, 0);
-        Point3D p2 = new Point3D(2, 2, 0);
-        Tube tube = new Tube(1d, ray);
+    public void testFindIntersectionsRay() {
+        Tube tube1 = new Tube(1d, new Ray(new Point3D(1, 0, 0), new Vector(0, 1, 0)));
+        Vector vAxis = new Vector(0, 0, 1);
+        Tube tube2 = new Tube(1d, new Ray(new Point3D(1, 1, 1), vAxis));
+        Ray ray;
 
+        // ============ Equivalence Partitions Tests ==============
         // TC01: Ray's line is outside the tube (0 points)
-        List<Intersectable.GeoPoint> result = tube.findIntersections(new Ray(new Point3D(0, 4, 3),
-                new Vector(1, 0, 0)));
+        ray = new Ray(new Point3D(1, 1, 2), new Vector(1, 1, 0));
+        assertNull("Must not be intersections", tube1.findIntersections(ray));
 
-        assertEquals("Ray's line out of tube", null, result);
-
-        // TC02: Ray starts before and crosses the tube (2 points)
-        result = tube.findIntersections(new Ray(new Point3D(-1, 2, 0),
-                new Vector(1, 0, 0)));
-
-        assertEquals("Wrong number of points", 2, result.size());
-
-        if (result.get(0).getPoint().getX().get() > result.get(1).getPoint().getX().get())
+        // TC02: Ray's crosses the tube (2 points)
+        ray = new Ray(new Point3D(0, 0, 0), new Vector(2, 1, 1));
+        List<Intersectable.GeoPoint> result = tube2.findGeoIntersections(ray);
+        assertNotNull("must be intersections", result);
+        assertEquals("must be 2 intersections", 2, result.size());
+        if (result.get(0)._point.getY() > result.get(1)._point.getY())
             result = List.of(result.get(1), result.get(0));
-        assertEquals("Ray crosses tube", List.of(p1, p2), result);
+        assertEquals("Bad intersections", List.of(new Intersectable.GeoPoint(tube2 , new Point3D(0.4, 0.2, 0.2)), new Intersectable.GeoPoint(tube2 ,new Point3D(2, 1, 1))), result);
 
-        // TC03: Ray starts inside the tube (1 point)
-        result = tube.findIntersections(new Ray(new Point3D(0.5, 2, 0),
-                new Vector(1, 0, 0)));
-
-        assertEquals("Wrong number of points", 1, result.size());
-        assertEquals("Ray's crosses the tube", List.of(p2), result);
-
-        // TC04: Ray starts after the tube (0 points)
-        assertEquals("Ray's start point out of tube", null,
-                tube.findIntersections(new Ray(new Point3D(3, 2, 0),
-                        new Vector(1, 0, 0))));
+        // TC03: Ray's starts within tube and crosses the tube (1 point)
+        ray = new Ray(new Point3D(1, 0.5, 0.5), new Vector(2, 1, 1));
+        result = tube2.findGeoIntersections(ray);
+        assertNotNull("must be intersections", result);
+        assertEquals("must be 1 intersections", 1, result.size());
+        assertEquals("Bad intersections", List.of(new Intersectable.GeoPoint(tube2 ,new Point3D(2, 1, 1))), result);
 
         // =============== Boundary Values Tests ==================
 
-        //TC11: Ray starts at tube and go inside (1 point)
-        result = tube.findIntersections(new Ray(p1, new Vector(1, 0, 0)));
+        // **** Group: Ray's line is parallel to the axis (0 points)
+        // TC11: Ray is inside the tube (0 points)
+        ray = new Ray(new Point3D(0.5, 0.5, 0.5), vAxis);
+        assertNull("must not be intersections", tube2.findIntersections(ray));
+        // TC12: Ray is outside the tube
+        ray = new Ray(new Point3D(0.5, -0.5, 0.5), vAxis);
+        assertNull("must not be intersections", tube2.findIntersections(ray));
+        // TC13: Ray is at the tube surface
+        ray = new Ray(new Point3D(2, 1, 0.5), vAxis);
+        assertNull("must not be intersections", tube2.findIntersections(ray));
+        // TC14: Ray is inside the tube and starts against axis head
+        ray = new Ray(new Point3D(0.5, 0.5, 1), vAxis);
+        assertNull("must not be intersections", tube2.findIntersections(ray));
+        // TC15: Ray is outside the tube and starts against axis head
+        ray = new Ray(new Point3D(0.5, -0.5, 1), vAxis);
+        assertNull("must not be intersections", tube2.findIntersections(ray));
+        // TC16: Ray is at the tube surface and starts against axis head
+        ray = new Ray(new Point3D(2, 1, 1), vAxis);
+        assertNull("must not be intersections", tube2.findIntersections(ray));
+        // TC17: Ray is inside the tube and starts at axis head
+        ray = new Ray(new Point3D(1, 1, 1), vAxis);
+        assertNull("must not be intersections", tube2.findIntersections(ray));
 
-        assertEquals("Wrong number of points", 1, result.size());
-        assertEquals("Ray's crosses the tube", List.of(p2), result);
+        // **** Group: Ray is orthogonal but does not begin against the axis head
+        // TC21: Ray starts outside and the line is outside (0 points)
+        ray = new Ray(new Point3D(0, 2, 2), new Vector(1, 1, 0));
+        assertNull("must not be intersections", tube2.findIntersections(ray));
+        // TC22: The line is tangent and the ray starts before the tube (0 points)
+        ray = new Ray(new Point3D(0, 2, 2), new Vector(1, 0, 0));
+        assertNull("must not be intersections", tube2.findIntersections(ray));
+        // TC23: The line is tangent and the ray starts at the tube (0 points)
+        ray = new Ray(new Point3D(1, 2, 2), new Vector(1, 0, 0));
+        assertNull("must not be intersections", tube2.findIntersections(ray));
+        // TC24: The line is tangent and the ray starts after the tube (0 points)
+        ray = new Ray(new Point3D(2, 2, 2), new Vector(1, 0, 0));
+        assertNull("must not be intersections", tube2.findIntersections(ray));
+        // TC25: Ray starts before (2 points)
+        ray = new Ray(new Point3D(0, 0, 2), new Vector(2, 1, 0));
+        result = tube2.findGeoIntersections(ray);
+        assertNotNull("must be intersections", result);
+        assertEquals("must be 2 intersections", 2, result.size());
+        if (result.get(0)._point.getY() > result.get(1)._point.getY())
+            result = List.of(result.get(1), result.get(0));
+        assertEquals("Bad intersections", List.of(new Intersectable.GeoPoint(tube2 ,new Point3D(0.4, 0.2, 2)),new Intersectable.GeoPoint(tube2, new Point3D(2, 1, 2))), result);
+        // TC26: Ray starts at the surface and goes inside (1 point)
+        ray = new Ray(new Point3D(0.4, 0.2, 2), new Vector(2, 1, 0));
+        result = tube2.findGeoIntersections(ray);
+        assertNotNull("must be intersections", result);
+        assertEquals("must be 1 intersections", 1, result.size());
+        assertEquals("Bad intersections", List.of(new Intersectable.GeoPoint(tube2 ,new Point3D(2, 1, 2))), result);
+        // TC27: Ray starts inside (1 point)
+        ray = new Ray(new Point3D(1, 0.5, 2), new Vector(2, 1, 0));
+        result = tube2.findGeoIntersections(ray);
+        assertNotNull("must be intersections", result);
+        assertEquals("must be 1 intersections", 1, result.size());
+        assertEquals("Bad intersections", List.of(new Intersectable.GeoPoint(tube2 ,new Point3D(2, 1, 2))), result);
+        // TC28: Ray starts at the surface and goes outside (0 points)
+        ray = new Ray(new Point3D(2, 1, 2), new Vector(2, 1, 0));
+        result = tube2.findGeoIntersections(ray);
+        assertNull("Bad intersections", result);
+        // TC29: Ray starts after
+        ray = new Ray(new Point3D(4, 2, 2), new Vector(2, 1, 0));
+        result = tube2.findGeoIntersections(ray);
+        assertNull("Bad intersections", result);
+        // TC30: Ray starts before and crosses the axis (2 points)
+        ray = new Ray(new Point3D(1, -1, 2), new Vector(0, 1, 0));
+        result = tube2.findGeoIntersections(ray);
+        assertNotNull("must be intersections", result);
+        assertEquals("must be 2 intersections", 2, result.size());
+        if (result.get(0)._point.getY() > result.get(1)._point.getY())
+            result = List.of(result.get(1), result.get(0));
+        assertEquals("Bad intersections", List.of(new Intersectable.GeoPoint(tube2 ,new Point3D(1, 0, 2)), new Intersectable.GeoPoint(tube2 , new Point3D(1, 2, 2))), result);
+        // TC31: Ray starts at the surface and goes inside and crosses the axis
+        ray = new Ray(new Point3D(1, 0, 2), new Vector(0, 1, 0));
+        result = tube2.findGeoIntersections(ray);
+        assertNotNull("must be intersections", result);
+        assertEquals("must be 1 intersections", 1, result.size());
+        assertEquals("Bad intersections", List.of(new Intersectable.GeoPoint(tube2 ,new Point3D(1, 2, 2))), result);
+        // TC32: Ray starts inside and the line crosses the axis (1 point)
+        ray = new Ray(new Point3D(1, 0.5, 2), new Vector(0, 1, 0));
+        result = tube2.findGeoIntersections(ray);
+        assertNotNull("must be intersections", result);
+        assertEquals("must be 1 intersections", 1, result.size());
+        assertEquals("Bad intersections", List.of(new Intersectable.GeoPoint(tube2, new Point3D(1, 2, 2))), result);
+        // TC33: Ray starts at the surface and goes outside and the line crosses the
+        // axis (0 points)
+        ray = new Ray(new Point3D(1, 2, 2), new Vector(0, 1, 0));
+        result = tube2.findGeoIntersections(ray);
+        assertNull("Bad intersections", result);
+        // TC34: Ray starts after and crosses the axis (0 points)
+        ray = new Ray(new Point3D(1, 3, 2), new Vector(0, 1, 0));
+        result = tube2.findGeoIntersections(ray);
+        assertNull("Bad intersections", result);
+        // TC35: Ray start at the axis
+        ray = new Ray(new Point3D(1, 1, 2), new Vector(0, 1, 0));
+        result = tube2.findGeoIntersections(ray);
+        assertNotNull("must be intersections", result);
+        assertEquals("must be 1 intersections", 1, result.size());
+        assertEquals("Bad intersections", List.of(new Intersectable.GeoPoint(tube2, new Point3D(1, 2, 2))), result);
 
-        // TC12: Ray starts at tube and goes outside (0 points)
-        assertEquals("Ray's start point the tube and go outside", null,
-                tube.findIntersections(new Ray(p2, new Vector(1, 0, 0))));
+        // **** Group: Ray is orthogonal to axis and begins against the axis head
+        // TC41: Ray starts outside and the line is outside (
+        ray = new Ray(new Point3D(0, 2, 1), new Vector(1, 1, 0));
+        assertNull("must not be intersections", tube2.findIntersections(ray));
+        // TC42: The line is tangent and the ray starts before the tube
+        ray = new Ray(new Point3D(0, 2, 1), new Vector(1, 0, 0));
+        assertNull("must not be intersections", tube2.findIntersections(ray));
+        // TC43: The line is tangent and the ray starts at the tube
+        ray = new Ray(new Point3D(1, 2, 1), new Vector(1, 0, 0));
+        assertNull("must not be intersections", tube2.findIntersections(ray));
+        // TC44: The line is tangent and the ray starts after the tube
+        ray = new Ray(new Point3D(2, 2, 2), new Vector(1, 0, 0));
+        assertNull("must not be intersections", tube2.findIntersections(ray));
+        // TC45: Ray starts before
+        ray = new Ray(new Point3D(0, 0, 1), new Vector(2, 1, 0));
+        result = tube2.findGeoIntersections(ray);
+        assertNotNull("must be intersections", result);
+        assertEquals("must be 2 intersections", 2, result.size());
+        if (result.get(0)._point.getY() > result.get(1)._point.getY())
+            result = List.of(result.get(1), result.get(0));
+        assertEquals("Bad intersections", List.of(new Intersectable.GeoPoint(tube2 ,new Point3D(0.4, 0.2, 1)), new Intersectable.GeoPoint(tube2 ,new Point3D(2, 1, 1))), result);
+        // TC46: Ray starts at the surface and goes inside
+        ray = new Ray(new Point3D(0.4, 0.2, 1), new Vector(2, 1, 0));
+        result = tube2.findGeoIntersections(ray);
+        assertNotNull("must be intersections", result);
+        assertEquals("must be 1 intersections", 1, result.size());
+        assertEquals("Bad intersections", List.of(new Intersectable.GeoPoint(tube2 ,new Point3D(2, 1, 1))), result);
+        // TC47: Ray starts inside
+        ray = new Ray(new Point3D(1, 0.5, 1), new Vector(2, 1, 0));
+        result = tube2.findGeoIntersections(ray);
+        assertNotNull("must be intersections", result);
+        assertEquals("must be 1 intersections", 1, result.size());
+        assertEquals("Bad intersections", List.of(new Intersectable.GeoPoint(tube2 ,new Point3D(2, 1, 1))), result);
+        // TC48: Ray starts at the surface and goes outside
+        ray = new Ray(new Point3D(2, 1, 1), new Vector(2, 1, 0));
+        result = tube2.findGeoIntersections(ray);
+        assertNull("Bad intersections", result);
+        // TC49: Ray starts after
+        ray = new Ray(new Point3D(4, 2, 1), new Vector(2, 1, 0));
+        result = tube2.findGeoIntersections(ray);
+        assertNull("Bad intersections", result);
+        // TC50: Ray starts before and goes through the axis head
+        ray = new Ray(new Point3D(1, -1, 1), new Vector(0, 1, 0));
+        result = tube2.findGeoIntersections(ray);
+        assertNotNull("must be intersections", result);
+        assertEquals("must be 2 intersections", 2, result.size());
+        if (result.get(0)._point.getY() > result.get(1)._point.getY())
+            result = List.of(result.get(1), result.get(0));
+        assertEquals("Bad intersections", List.of(new Intersectable.GeoPoint(tube2 ,new Point3D(1, 0, 1)),new Intersectable.GeoPoint(tube2 , new Point3D(1, 2, 1))), result);
+        // TC51: Ray starts at the surface and goes inside and goes through the axis
+        // head
+        ray = new Ray(new Point3D(1, 0, 1), new Vector(0, 1, 0));
+        result = tube2.findGeoIntersections(ray);
+        assertNotNull("must be intersections", result);
+        assertEquals("must be 1 intersections", 1, result.size());
+        assertEquals("Bad intersections", List.of(new Intersectable.GeoPoint(tube2, new Point3D(1, 2, 1))), result);
+        // TC52: Ray starts inside and the line goes through the axis head
+        ray = new Ray(new Point3D(1, 0.5, 1), new Vector(0, 1, 0));
+        result = tube2.findGeoIntersections(ray);
+        assertNotNull("must be intersections", result);
+        assertEquals("must be 1 intersections", 1, result.size());
+        assertEquals("Bad intersections", List.of(new Intersectable.GeoPoint(tube2, new Point3D(1, 2, 1))), result);
+        // TC53: Ray starts at the surface and the line goes outside and goes through
+        // the axis head
+        ray = new Ray(new Point3D(1, 2, 1), new Vector(0, 1, 0));
+        result = tube2.findGeoIntersections(ray);
+        assertNull("Bad intersections", result);
+        // TC54: Ray starts after and the line goes through the axis head
+        ray = new Ray(new Point3D(1, 3, 1), new Vector(0, 1, 0));
+        result = tube2.findGeoIntersections(ray);
+        assertNull("Bad intersections", result);
+        // TC55: Ray start at the axis head
+        ray = new Ray(new Point3D(1, 1, 1), new Vector(0, 1, 0));
+        result = tube2.findGeoIntersections(ray);
+        assertNotNull("must be intersections", result);
+        assertEquals("must be 1 intersections", 1, result.size());
+        assertEquals("Bad intersections", List.of(new Intersectable.GeoPoint(tube2 ,new Point3D(1, 2, 1))), result);
+
+        // **** Group: Ray's line is neither parallel nor orthogonal to the axis and
+        // begins against axis head
+        Point3D p0 = new Point3D(0, 2, 1);
+        // TC61: Ray's line is outside the tube
+        ray = new Ray(p0, new Vector(1, 1, 1));
+        result = tube2.findGeoIntersections(ray);
+        assertNull("Bad intersections", result);
+        // TC62: Ray's line crosses the tube and begins before
+        ray = new Ray(p0, new Vector(2, -1, 1));
+        result = tube2.findGeoIntersections(ray);
+        assertNotNull("must be intersections", result);
+        assertEquals("must be 2 intersections", 2, result.size());
+        if (result.get(0)._point.getY() > result.get(1)._point.getY())
+            result = List.of(result.get(1), result.get(0));
+        assertEquals("Bad intersections", List.of(new Intersectable.GeoPoint(tube2 ,new Point3D(2, 1, 2)), new Intersectable.GeoPoint(tube2 , new Point3D(0.4, 1.8, 1.2))), result);
+        // TC63: Ray's line crosses the tube and begins at surface and goes inside
+        ray = new Ray(new Point3D(0.4, 1.8, 1), new Vector(2, -1, 1));
+        result = tube2.findGeoIntersections(ray);
+        assertNotNull("must be intersections", result);
+        assertEquals("must be 1 intersections", 1, result.size());
+        assertEquals("Bad intersections", List.of(new Intersectable.GeoPoint(tube2, new Point3D(2, 1, 1.8))), result);
+        // TC64: Ray's line crosses the tube and begins inside
+        ray = new Ray(new Point3D(1, 1.5, 1), new Vector(2, -1, 1));
+        result = tube2.findGeoIntersections(ray);
+        assertNotNull("must be intersections", result);
+        assertEquals("must be 1 intersections", 1, result.size());
+        assertEquals("Bad intersections", List.of(new Intersectable.GeoPoint(tube2, new Point3D(2, 1, 1.5))), result);
+        // TC65: Ray's line crosses the tube and begins at the axis head
+        ray = new Ray(new Point3D(1, 1, 1), new Vector(0, 1, 1));
+        result = tube2.findGeoIntersections(ray);
+        assertNotNull("must be intersections", result);
+        assertEquals("must be 1 intersections", 1, result.size());
+        assertEquals("Bad intersections", List.of(new Intersectable.GeoPoint(tube2, new Point3D(1, 2, 2))), result);
+        // TC66: Ray's line crosses the tube and begins at surface and goes outside
+        ray = new Ray(new Point3D(2, 1, 1), new Vector(2, -1, 1));
+        result = tube2.findGeoIntersections(ray);
+        assertNull("Bad intersections", result);
+        // TC67: Ray's line is tangent and begins before
+        ray = new Ray(p0, new Vector(0, 2, 1));
+        result = tube2.findGeoIntersections(ray);
+        assertNull("Bad intersections", result);
+        // TC68: Ray's line is tangent and begins at the tube surface
+        ray = new Ray(new Point3D(1, 2, 1), new Vector(1, 0, 1));
+        result = tube2.findGeoIntersections(ray);
+        assertNull("Bad intersections", result);
+        // TC69: Ray's line is tangent and begins after
+        ray = new Ray(new Point3D(2, 2, 1), new Vector(1, 0, 1));
+        result = tube2.findGeoIntersections(ray);
+        assertNull("Bad intersections", result);
+
+        // **** Group: Ray's line is neither parallel nor orthogonal to the axis and
+        // does not begin against axis head
+        double sqrt2 = Math.sqrt(2);
+        double denomSqrt2 = 1 / sqrt2;
+        double value1 = 1 - denomSqrt2;
+        double value2 = 1 + denomSqrt2;
+        // TC71: Ray's crosses the tube and the axis
+        ray = new Ray(new Point3D(0, 0, 2), new Vector(1, 1, 1));
+        result = tube2.findGeoIntersections(ray);
+        assertNotNull("must be intersections", result);
+        assertEquals("must be 2 intersections", 2, result.size());
+        if (result.get(0)._point.getY() > result.get(1)._point.getY())
+            result = List.of(result.get(1), result.get(0));
+        assertEquals("Bad intersections",
+                List.of(new Intersectable.GeoPoint(tube2 ,new Point3D(value1, value1, 2 + value1)),new Intersectable.GeoPoint(tube2 , new Point3D(value2, value2, 2 + value2))), result);
+        // TC72: Ray's crosses the tube and the axis head
+        ray = new Ray(new Point3D(0, 0, 0), new Vector(1, 1, 1));
+        result = tube2.findGeoIntersections(ray);
+        assertNotNull("must be intersections", result);
+        assertEquals("must be 2 intersections", 2, result.size());
+        if (result.get(0)._point.getY() > result.get(1)._point.getY())
+            result = List.of(result.get(1), result.get(0));
+        assertEquals("Bad intersections",
+                List.of(new Intersectable.GeoPoint(tube2 ,new Point3D(value1, value1, value1)), new Intersectable.GeoPoint(tube2, new Point3D(value2, value2, value2))), result);
+        // TC73: Ray's begins at the surface and goes inside
+        // TC74: Ray's begins at the surface and goes inside crossing the axis
+        ray = new Ray(new Point3D(value1, value1, 2 + value1), new Vector(1, 1, 1));
+        result = tube2.findGeoIntersections(ray);
+        assertNotNull("must be intersections", result);
+        assertEquals("must be 1 intersections", 1, result.size());
+        assertEquals("Bad intersections",
+                List.of(new Intersectable.GeoPoint(tube2 ,new Point3D(value2, value2, 2 + value2))), result);
+        // TC75: Ray's begins at the surface and goes inside crossing the axis head
+        ray = new Ray(new Point3D(value1, value1, value1), new Vector(1, 1, 1));
+        result = tube2.findGeoIntersections(ray);
+        assertNotNull("must be intersections", result);
+        assertEquals("must be 1 intersections", 1, result.size());
+        assertEquals("Bad intersections",
+                List.of(new Intersectable.GeoPoint(tube2 ,new Point3D(value2, value2, value2))), result);
+        // TC76: Ray's begins inside and the line crosses the axis
+        ray = new Ray(new Point3D(0.5, 0.5, 2.5), new Vector(1, 1, 1));
+        result = tube2.findGeoIntersections(ray);
+        assertNotNull("must be intersections", result);
+        assertEquals("must be 1 intersections", 1, result.size());
+        assertEquals("Bad intersections",
+                List.of(new Intersectable.GeoPoint(tube2 ,new Point3D(value2, value2, 2 + value2))), result);
+        // TC77: Ray's begins inside and the line crosses the axis head
+        ray = new Ray(new Point3D(0.5, 0.5, 0.5), new Vector(1, 1, 1));
+        result = tube2.findGeoIntersections(ray);
+        assertNotNull("must be intersections", result);
+        assertEquals("must be 1 intersections", 1, result.size());
+        assertEquals("Bad intersections",
+                List.of(new Intersectable.GeoPoint(tube2 ,new Point3D(value2, value2, value2))), result);
+        // TC78: Ray's begins at the axis
+        ray = new Ray(new Point3D(1, 1, 3), new Vector(1, 1, 1));
+        result = tube2.findGeoIntersections(ray);
+        assertNotNull("must be intersections", result);
+        assertEquals("must be 1 intersections", 1, result.size());
+        assertEquals("Bad intersections",
+                List.of(new Intersectable.GeoPoint(tube2 ,new Point3D(value2, value2, 2 + value2))), result);
+        // TC79: Ray's begins at the surface and goes outside
+        ray = new Ray(new Point3D(2, 1, 2), new Vector(2, 1, 1));
+        result = tube2.findGeoIntersections(ray);
+        assertNull("Bad intersections", result);
+        // TC80: Ray's begins at the surface and goes outside and the line crosses the
+        // axis
+        ray = new Ray(new Point3D(value2, value2, 2 + value2), new Vector(1, 1, 1));
+        result = tube2.findGeoIntersections(ray);
+        assertNull("Bad intersections", result);
+        // TC81: Ray's begins at the surface and goes outside and the line crosses the
+        // axis head
+        ray = new Ray(new Point3D(value2, value2, value2), new Vector(1, 1, 1));
+        result = tube2.findGeoIntersections(ray);
+        assertNull("Bad intersections", result);
 
     }
 }

@@ -1,46 +1,52 @@
 package geometries;
 
 import primitives.Color;
-import primitives.Point3D;
-import primitives.Vector;
+import primitives.Material;
 
-import static primitives.Util.isZero;
-
+/**
+ * Abstract class for any geometry with a single radius
+ */
 public abstract class RadialGeometry extends Geometry {
     protected double _radius;
 
-    /***************contractors***********/
-
     /**
-     * contractor for creating a RadialGeometry
+     * constructor for a new extended  RadialGeometry object.
      *
-     * @param emissionLight get the emissionLight of the Radial
-     * @param _radius       the radius of the Radial
+     * @param emissionLight the emission light color
+     * @param radius        the radius of the RadialGeometry
+     * @param material      the material of the RadialGeometry
+     * @throws IllegalArgumentException in any case of radius less or equal to 0
      */
-    public RadialGeometry(Color emissionLight, double _radius) {
-        super(emissionLight);
-        if (isZero(_radius) || (_radius < 0.0))
-            throw new IllegalArgumentException("radius " + _radius + " is not valid");
-        this._radius = _radius;
+    public RadialGeometry(Color emissionLight, Material material, double radius) {
+        super(emissionLight, material);
+        _radius = radius;
     }
 
     /**
-     * copy contractor
+     * constructor for a new extended  RadialGeometry object.
      *
-     * @param other get radios for copy contractor
+     * @param emissionLight  the emission light color
+     * @param radius         the radius of the RadialGeometry
      */
-    public RadialGeometry(RadialGeometry other) {
-        super(Color.BLACK);
-        this._radius = other._radius;
+    public RadialGeometry(Color emissionLight, double radius) {
+        this(emissionLight, new Material(0, 0, 0),radius);
     }
 
     /**
-     * getter for the radios
+     * constructor for a new extended  RadialGeometry object.
      *
-     * @return radios point
+     * @param radius  the radius of the RadialGeometry
      */
-    public double get_radius() {
+    public RadialGeometry(double radius) {
+        this(Color.BLACK,  new Material(0, 0, 0), radius);
+    }
+
+    /**
+     * Radius getter
+     * @return the radius
+     */
+    public double getRadius() {
         return _radius;
     }
-
 }
+

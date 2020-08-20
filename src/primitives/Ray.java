@@ -1,103 +1,90 @@
 package primitives;
 
-import static primitives.Util.isZero;
+import static primitives.Util.*;
 
 /**
- * Ray class
+ * Class Ray is the basic class representing a ray of Euclidean geometry
+ * in Cartesian 3-Dimensional coordinate system.<br>
+ * A ray consists of those points on a line passing through a given point and
+ * proceeding indefinitely, starting at the given point, in one direction only along the line<br>
+ * Ray direction is stored as a unit vector providing both line's direction and the part of the
+ * line whose points belong to the ray
+ *
+ * @author Dan Zilberstein
  */
 public class Ray {
+
     private static final double DELTA = 0.1;
-    /**
-     * The point from which the ray starts.
-     */
-    private final Point3D _point;
-    /**
-     * The direction of the ray.
-     */
-    private final Vector _direction;
 
-    /***************contractors***********/
+    private Point3D _p0;
+    private Vector _v;
 
     /**
-     * Constructor for creating a new instance of this class
+     * Ray constructor by ray beginning point and its direction
      *
-     * @param point     the start of the ray.
-     * @param direction the direction of the ray.
+     * @param p ray beginning point
+     * @param v ray direction vector
      */
-    public Ray(Point3D point, Vector direction) {
-        _point = new Point3D(point);
-        _direction = new Vector(direction).normalized();
+    public Ray(Point3D p, Vector v) {
+        _p0 = new Point3D(p);
+        _v = v.normalized();
     }
-
-    public Ray(Point3D point, Vector direction, Vector normal) {
-        //head+ normal.scale(±DELTA)
-        _direction = new Vector(direction).normalized();
-
-        double nv = normal.dotProduct(direction);
-
+    /**
+     * Ray constructor by ray beginning point and its direction and DELTA
+     *
+     * @param p       ray beginning point
+     * @param v       ray direction vector
+     * @param normal  ray normal vector
+     */
+    public Ray(Point3D p, Vector v, Vector normal) {
+        _v = v.normalized();
+        double nv = normal.dotProduct(v);
         Vector normalDelta = normal.scale((nv > 0 ? DELTA : -DELTA));
-        _point = point.add(normalDelta);
+        _p0 = p.add(normalDelta);
     }
 
     /**
-     * Copy constructor for a deep copy of an Ray object.
-     *
-     * @param other the object that being copied
+     * Getter of ray beginning point
+     * @return ray beginning point
      */
-    public Ray(Ray other) {
-        this._point = new Point3D(other._point);
-        this._direction = other._direction.normalized();
+    public Point3D getP0() {
+        return _p0;
+    }
+
+    /**
+     * Getter of ray direction
+     *
+     * @return direction vector (unit vector)
+     */
+    public Vector getDirection() {
+        return _v;
+    }
+
+    /**
+     * Get point on ray at a distance from ray's head
+     *
+     * @param t distance from ray head
+     * @return the point
+     */
+    public Point3D getPoint(double t) {
+        try {
+            return _p0.add(_v.scale(t));
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof Ray))
-            return false;
-        if (this == obj)
-            return true;
-        Ray other = (Ray) obj;
-        return (_point.equals(other._point) &&
-                _direction.equals(other._direction));
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (!(obj instanceof Ray)) return false;
+        Ray oth = (Ray) obj;
+        return _p0.equals(oth._p0) && _v.equals(oth._v);
     }
 
     @Override
     public String toString() {
-        return String.format("point: " + _point + ", direction: " + _direction);
-    }
-
-    /**
-     * Getter for the point from which the ray starts.
-     *
-     * @return A new Point3D that represents the
-     * point from which the ray starts.
-     */
-    public Point3D getPoint() {
-        return new Point3D(_point);
-    }
-
-    /**
-     * Getter for the direction of the ray that is
-     * represented by this object.
-     *
-     * @return A new Vector that represents the
-     * direction of the ray that is
-     * represented by this object.
-     */
-    public Vector getDirection() {
-        return new Vector(_direction);
-    }
-
-    /**
-     * @param length to calculate the distance
-     * @return new Point3D
-     */
-    public Point3D getTargetPoint(double length) {
-        Vector targetVector;
-        try {
-            targetVector = _direction.scale(length);
-        } catch (Exception e) {
-            return _point;
-        }
-        return isZero(length) ? _point : _point.add(targetVector);
+        return "o" + _p0 + "-" + _v + ">";
     }
 }

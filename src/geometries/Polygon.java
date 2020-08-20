@@ -1,6 +1,5 @@
 package geometries;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import primitives.*;
@@ -10,6 +9,8 @@ import static primitives.Util.*;
 /**
  * Polygon class represents two-dimensional polygon in 3D Cartesian coordinate
  * system
+ *
+ * @author Dan
  */
 public class Polygon extends Geometry {
     /**
@@ -25,9 +26,9 @@ public class Polygon extends Geometry {
      * Polygon constructor based on vertices list. The list must be ordered by edge
      * path. The polygon must be convex.
      *
-     * @param emissionLight the emissionLight of the Polygon
-     * @param material      the attenuation
-     * @param vertices      list of vertices according to their order by edge path
+     * @param emissionLight  is the emission light
+     * @param material is the material
+     * @param vertices  list of vertices according to their order by edge path
      * @throws IllegalArgumentException in any case of illegal combination of
      *                                  vertices:
      *                                  <ul>
@@ -87,6 +88,16 @@ public class Polygon extends Geometry {
 
     /**
      * Polygon constructor based on vertices list,
+     * with default Values for the emissionLight
+     *
+     * @param vertices list of vertices according to their order by edge path
+     */
+    public Polygon(Point3D... vertices) {
+        this(Color.BLACK, new Material(0, 0, 0), vertices);
+    }
+
+    /**
+     * Polygon constructor based on vertices list,
      * with default Values for the kd, ks and nShininess
      *
      * @param emissionLight the emissionLight of the Polygon
@@ -96,46 +107,23 @@ public class Polygon extends Geometry {
         this(emissionLight, new Material(0, 0, 0), vertices);
     }
 
-    /**
-     * Polygon constructor based on vertices list,
-     * with default Values for the kd, ks, emissionLight, and nShininess.
-     *
-     * @param vertices list of vertices according to their order by edge path
-     */
-    public Polygon(Point3D... vertices) {
-        this(Color.BLACK, new Material(0, 0, 0), vertices);
-    }
-
-    /**
-     * @param point get the point to calculate the normal
-     * @return normal vector
-     */
     @Override
     public Vector getNormal(Point3D point) {
         return _plane.getNormal();
     }
 
-    /**
-     * func to find the Intersections point between the ray and the Polygon
-     *
-     * @param ray ray pointing toward a Geometry
-     * @return List<GeoPoint> with the Intersections point
-     */
     @Override
-    public List<GeoPoint> findIntersections(Ray ray, double maxDistance) {
-        List<GeoPoint> planeIntersections = _plane.findIntersections(ray, maxDistance);
-        if (planeIntersections == null)
-            return null;
+    public List<GeoPoint> findGeoIntersections(Ray ray) {
+        List<GeoPoint> intersections = _plane.findGeoIntersections(ray);
+        if (intersections == null) return null;
 
-        Point3D p0 = ray.getPoint();
+        Point3D p0 = ray.getP0();
         Vector v = ray.getDirection();
 
         Vector v1 = _vertices.get(1).subtract(p0);
         Vector v2 = _vertices.get(0).subtract(p0);
         double sign = v.dotProduct(v1.crossProduct(v2));
-        if (isZero(sign))
-            return null;
-
+        if (isZero(sign)) return null;
         boolean positive = sign > 0;
 
         for (int i = _vertices.size() - 1; i > 0; --i) {
@@ -145,12 +133,7 @@ public class Polygon extends Geometry {
             if (isZero(sign)) return null;
             if (positive != (sign > 0)) return null;
         }
-
-        //for GeoPoint
-        List<GeoPoint> result = new LinkedList<>();
-        for (GeoPoint geo : planeIntersections) {
-            result.add(new GeoPoint(this, geo.getPoint()));
-        }
-        return result;
+        intersections.get(0)._geometry = this;
+        return intersections;
     }
 }

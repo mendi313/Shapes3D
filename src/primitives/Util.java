@@ -1,15 +1,14 @@
 package primitives;
-
 /**
  * Util class is used for some internal utilities, e.g. controlling accuracy
- * 
- * @author Dan zilberstein
+ *
+ * @author Dan
  */
 public abstract class Util {
     // It is binary, equivalent to ~1/1,000,000,000,000 in decimal (12 digits)
     private static final int ACCURACY = -40;
 
-    // double store format (bit level): seee eeee eeee (1.)mmmm � mmmm
+    // double store format (bit level):
     // 1 bit sign, 11 bits exponent, 53 bits (52 stored) normalized mantissa
     // the number is m+2^e where 1<=m<2
     // NB: exponent is stored "normalized" (i.e. always positive by adding 1023)
@@ -23,8 +22,8 @@ public abstract class Util {
 
     /**
      * Checks whether the number is [almost] zero
-     * 
-     * @param number get number for checking
+     *
+     * @param number double
      * @return true if the number is zero or almost zero, false otherwise
      */
     public static boolean isZero(double number) {
@@ -33,11 +32,13 @@ public abstract class Util {
 
     /**
      * Aligns the number to zero if it is almost zero
-     * 
-     * @param number get number for checking
+     *
+     * @param number double
      * @return 0.0 if the number is very close to zero, the number itself otherwise
      */
     public static double alignZero(double number) {
         return getExp(number) < ACCURACY ? 0.0 : number;
     }
 }
+
+

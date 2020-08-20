@@ -1,70 +1,70 @@
 package primitives;
 
+/**
+ * The class represents a material of object
+ */
 public class Material {
-    private final double _kD;
-    private final double _kS;
-    private final int _nShininess;
+    private double _kD;
+    private double _kS;
+    private int _nShininess;
     private final double _kr;
     private final double _kt;
 
-    /***************contractors***********/
+    /***************constructors***********/
 
     /**
-     * @param kD
-     * @param kS
-     * @param nShininess
-     * @param kt
-     * @param kr
+     * constructor for a new material object
+     *
+     * @param kD          how much it reflects
+     * @param kS          how much it shiny
+     * @param nShininess  how small is specular
+     * @param kt          Promotes transparency
+     * @param kr          Promotes reflection
      */
     public Material(double kD, double kS, int nShininess, double kt, double kr) {
-        this._kD = kD;
-        this._kS = kS;
-        this._nShininess = nShininess;
-        this._kt = kt;
-        this._kr = kr;
+        _kD = kD;
+        _kS = kS;
+        _nShininess = nShininess;
+        _kt = kt;
+        _kr = kr;
     }
 
     /**
-     * @param kD
-     * @param kS
-     * @param nShininess
+     * constructor for a new material object
+     *
+     * @param kD          how much it reflects
+     * @param kS          how much it shiny
+     * @param nShininess  how small is specular
      */
     public Material(double kD, double kS, int nShininess) {
         this(kD, kS, nShininess, 0, 0);
     }
 
-    /**
-     * @param material
-     */
-    public Material(Material material) {
-        this(material._kD, material._kS, material._nShininess, material._kt, material._kr);
-    }
-
-    /**
-     * getter for the nShininess(
-     *
-     * @return int Shininess
-     */
-    public int getnShininess() {
-        return _nShininess;
-    }
-
+    /***************getter***********/
     /**
      * getter for the kD
      *
-     * @return double kD
+     *   @return kD
      */
-    public double getkD() {
+    public double getKd() {
         return _kD;
     }
-
     /**
      * getter for the kS
      *
-     * @return double kS
+     *   @return kS
      */
-    public double getkS() {
+    public double getKs() {
         return _kS;
+    }
+
+    /**
+     * getter for the nShininess
+     *
+     *   @return nShininess
+     */
+    public int getNShininess() {
+        return _nShininess;
     }
 
     /**

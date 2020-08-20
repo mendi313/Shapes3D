@@ -1,174 +1,128 @@
 package geometries;
 
 import primitives.*;
-
+import static primitives.Util.*;
 import java.util.List;
 
-import static java.lang.StrictMath.sqrt;
-import static primitives.Util.alignZero;
-import static primitives.Util.isZero;
-
 /**
- * Represents an infinite tube in the 3D space.
- * That is, the cylinder does not have a length.
+ * Tube class represents Euclidean infinite cylinder in 3D Cartesian coordinate
+ * system represented by its central ray and radius
  */
-
 public class Tube extends RadialGeometry {
+    protected Ray _axis;
     /**
-     * represents the direction and the reference point
-     */
-    protected final Ray _ray;
-
-    /***************contractors***********/
-
-    /**
-     * constructor for a new Tube object
+     * Tube constructor given its radius and its central ray
      *
-     * @param _radius       the radius of the cylinder
-     * @param _ray          the direction of the cylinder from a center point
-     * @param emissionLight the emissionLight of the Tube
-     * @param _material     the attenuation
+     * @param emissionLight the emission Light of the Tube
+     * @param material   the material of the Plane
+     * @param radius  is the radius
+     * @param r is the ray
      */
-    public Tube(Color emissionLight, Material _material, double _radius, Ray _ray) {
-        super(emissionLight, _radius);
-        this._material = _material;
-        this._ray = new Ray(_ray);
-
+    public Tube(Color emissionLight, Material material, double radius, Ray r) {
+        super(emissionLight, material, radius);
+        _axis = r;
     }
-
     /**
-     * constructor for a new Tube object with default Values for the kd, ks, emissionLight, and nShininess.
+     * Tube constructor given its radius and its central ray
      *
-     * @param _radius the radius of the cylinder
-     * @param _ray    the direction of the cylinder from a center point
+     *@param emissionLight the emission Light of the Tube
+     * @param radius is the radius
+     * @param r is the ray
      */
-    public Tube(double _radius, Ray _ray) {
-        this(Color.BLACK, new Material(0, 0, 0), _radius, _ray);
+    public Tube(Color emissionLight, double radius, Ray r) {
+        this(emissionLight, new Material(0,0,0), radius, r);
     }
-
     /**
-     * constructor for a new Tube object with default Values for the kd, ks, and nShininess.
+     * constructor for a new Tube object with default Values for the  emissionLight.
      *
-     * @param emissionLight the emissionLight of the Tube
-     * @param _radius       the radius of the cylinder
-     * @param _ray          the direction of the cylinder from a center point
+     * @param radius the radius of the cylinder
+     * @param ray    the direction of the cylinder from a center point
      */
-    public Tube(Color emissionLight, double _radius, Ray _ray) {
-        this(emissionLight, new Material(0, 0, 0), _radius, _ray);
+    public Tube(double radius, Ray ray) {
+        this(Color.BLACK, new Material(0,0,0), radius, ray);
     }
 
-    /**
-     * getter for the ray
-     *
-     * @return ray
-     */
-    public Ray get_ray() {
-        return new Ray(_ray);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof Tube))
-            return false;
-        if (this == obj)
-            return true;
-        Tube other = (Tube) obj;
-
-        //the two vectors needs to be in the same direction,
-        //but not necessary to have the same length.
-        try {
-            Vector v = _ray.getDirection().crossProduct(other._ray.getDirection());
-        } catch (IllegalArgumentException ex) {
-            return (Util.isZero(this._radius - other._radius) && _ray.getPoint().equals((_ray.getPoint())));
-        }
-        throw new IllegalArgumentException("direction cross product with parameter.direction == Vector(0,0,0)");
-    }
-
-    @Override
-    public String toString() {
-        return "ray: " + _ray +
-                ", radius: " + _radius;
-    }
-
-    /**
-     * func to calculate the normal to the tube
-     *
-     * @param point point to calculate the normal
-     * @return returns normal vector
-     */
     @Override
     public Vector getNormal(Point3D point) {
-        //The vector from the point of the cylinder to the given point
-        Point3D o = _ray.getPoint(); // at this point o = p0
-        Vector v = _ray.getDirection();
-
-        Vector vector1 = point.subtract(o);
-
-        //We need the projection to multiply the _direction unit vector
-        double projection = vector1.dotProduct(v);
-        if (!isZero(projection)) {
-            // projection of P-O on the ray:
-            o = o.add(v.scale(projection));
-        }
-
-        //This vector is orthogonal to the _direction vector.
-        Vector check = point.subtract(o);
-        return check.normalize();
+        Point3D o = _axis.getP0();
+        Vector v = _axis.getDirection();
+        // projection of P-O on the ray:
+        double t = point.subtract(o).dotProduct(v);
+        if (!isZero(t)) // if it's close to 0, we'll get ZERO vector exception
+            o = o.add(v.scale(t));
+        return point.subtract(o).normalize();
     }
 
-    /**
-     * func to find the Intersections point between the ray and the Tube
-     *
-     * @param anotherray ray pointing toward a Geometry
-     * @return List<GeoPoint> with the Intersections point
-     */
     @Override
-    public List<GeoPoint> findIntersections(Ray anotherray, double maxDistance) {
-        //TODO implementation
+    public List<GeoPoint> findGeoIntersections(Ray ray) {
+        Vector vAxis = _axis.getDirection();
+        Vector v = ray.getDirection();
+        Point3D p0 = ray.getP0();
 
-        Point3D P = anotherray.getPoint();
-        Point3D _point = this._ray.getPoint();
+        // At^2+Bt+C=0
+        double a = 0;
+        double b = 0;
+        double c = 0;
 
-        Vector V = anotherray.getDirection(),
-                Va = this._ray.getDirection(),
-                DeltaP = new Vector(P.subtract(_point)),
-                temp_for_use1, temp_for_use2;
-
-        double V_dot_Va = V.dotProduct(Va),
-                DeltaP_dot_Va = DeltaP.dotProduct(Va);
-
-        temp_for_use1 = V.subtract(Va.scale(V_dot_Va));
-        temp_for_use2 = DeltaP.subtract(Va.scale(DeltaP_dot_Va));
-
-        double A = temp_for_use1.dotProduct(temp_for_use1);
-        double B = 2 * V.subtract(Va.scale(V_dot_Va)).dotProduct(DeltaP.subtract(Va.scale(DeltaP_dot_Va)));
-        double C = temp_for_use2.dotProduct(temp_for_use2) - _radius * _radius;
-        double desc = alignZero(B * B - 4 * A * C);
-
-        if (desc < 0) {//No solution
-            return null;
-        }
-
-        double t1 = (-B + Math.sqrt(desc)) / (2 * A),
-                t2 = (-B - Math.sqrt(desc)) / (2 * A);
-
-        if (desc == 0) {//One solution
-            if (-B / (2 * A) < 0) {
+        double vVa = alignZero(v.dotProduct(vAxis));
+        Vector vVaVa;
+        Vector vMinusVVaVa;
+        if (vVa == 0) // the ray is orthogonal to the axis
+            vMinusVVaVa = v;
+        else {
+            vVaVa = vAxis.scale(vVa);
+            try {
+                vMinusVVaVa = v.subtract(vVaVa);
+            } catch (IllegalArgumentException e1) { // the rays is parallel to axis
                 return null;
-            } else {
-                return List.of(new GeoPoint(this, P.add(V.scale(-B / (2 * A)))));
             }
-        } else if (t1 < 0 && t2 < 0) {
-            return null;
-        } else if (t1 < 0 && t2 > 0) {
-            return List.of(new GeoPoint(this, P.add(V.scale(t2))));
-        } else if (t1 > 0 && t2 < 0) {
-            return List.of(new GeoPoint(this, P.add(V.scale(t1))));
-        } else {
-            return List.of(
-                    new GeoPoint(this, P.add(V.scale(t1))),
-                    new GeoPoint(this, P.add(V.scale(t2)))
-            );
         }
+        // A = (v-(v*va)*va)^2
+        a = vMinusVVaVa.lengthSquared();
+
+        Vector deltaP = null;
+        try {
+            deltaP = p0.subtract(_axis.getP0());
+        } catch (IllegalArgumentException e1) { // the ray begins at axis P0
+            if (vVa == 0) // the ray is orthogonal to Axis
+                return List.of(new GeoPoint(this,ray.getPoint(_radius)));
+            return List.of(new GeoPoint(this,ray.getPoint(Math.sqrt(_radius * _radius / vMinusVVaVa.lengthSquared()))));
+        }
+
+        double dPVAxis = alignZero(deltaP.dotProduct(vAxis));
+        Vector dPVaVa;
+        Vector dPMinusdPVaVa;
+        if (dPVAxis == 0)
+            dPMinusdPVaVa = deltaP;
+        else {
+            dPVaVa = vAxis.scale(dPVAxis);
+            try {
+                dPMinusdPVaVa = deltaP.subtract(dPVaVa);
+            } catch (IllegalArgumentException e1) {
+                return List.of(new GeoPoint(this,ray.getPoint(Math.sqrt(_radius * _radius / a))));
+            }
+        }
+
+        // B = 2(v - (v*va)*va) * (dp - (dp*va)*va))
+        b = 2 * alignZero(vMinusVVaVa.dotProduct(dPMinusdPVaVa));
+        c = dPMinusdPVaVa.lengthSquared() - _radius * _radius;
+
+        // A*t^2 + B*t + C = 0 - lets resolve it
+        double discr = alignZero(b * b - 4 * a * c);
+        if (discr <= 0) return null; // the ray is outside or tangent to the tube
+
+        double doubleA = 2 * a;
+        double tm = alignZero(-b / doubleA);
+        double th = Math.sqrt(discr) / doubleA;
+        if (isZero(th)) return null; // the ray is tangent to the tube
+
+        double t1 = alignZero(tm - th);
+        double t2 = alignZero(tm + th);
+        if (t1 > 0 && t2 > 0)
+            return List.of(new GeoPoint(this, ray.getPoint(t1)), new GeoPoint(this, ray.getPoint(t2)));
+        if (t1 > 0) return List.of(new GeoPoint(this,ray.getPoint(t1)));
+        if (t2 > 0) return List.of(new GeoPoint(this,ray.getPoint(t2)));
+
+        return null;
     }
 }

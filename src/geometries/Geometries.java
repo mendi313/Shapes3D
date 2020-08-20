@@ -1,70 +1,40 @@
 package geometries;
 
+import java.util.LinkedList;
+import java.util.List;
 import primitives.Point3D;
 import primitives.Ray;
 
-import javax.print.DocFlavor;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
+/**
+ * Composite class which include a collection of any base and composite geometries
+ */
 public class Geometries implements Intersectable {
-    private List<Intersectable> _geometries = new ArrayList<Intersectable>();
-
-    /***************contractors***********/
+    private List<Intersectable> _geometries = new LinkedList<Intersectable>();
 
     /**
-     * contractors that build List of Geometries
-     *
-     * @param _geometries get number of different Geometries
+     * Geometries constructor allowing to add zero or more geometries
+     * while creating it
+     * @param geometries to add to the collection
      */
-    public Geometries(Intersectable... _geometries) {
-        add(_geometries);
+    public Geometries(Intersectable... geometries) {
+        add(geometries);
     }
 
     /**
-     * contractors that build List of Geometries
-     *
-     * @param intersectables get number of different Geometries
-     */
-    public Geometries(ArrayList<Intersectable> intersectables) {
-        add(intersectables);
-    }
-
-    /**
-     * func to add Geometries to are List
-     *
-     * @param intersectables get different type of Geometries
-     */
-    private void add(ArrayList<Intersectable> intersectables) {
-        for (Intersectable geo : intersectables) {
-            _geometries.add(geo);
-        }
-    }
-
-    /**
-     * func to add Geometries to are List
-     *
-     * @param geometries get different type of Geometries
+     * The function add allows to add zero or more geometries to the
+     * composite geometry
+     * @param geometries to add to the collection
      */
     public void add(Intersectable... geometries) {
-        for (Intersectable geo : geometries) {
-            _geometries.add(geo);
-        }
+        for (Intersectable geometry : geometries)
+            _geometries.add(geometry);
     }
 
-    /**
-     * func to find the Intersections point between the ray and the Geometries
-     *
-     * @param ray to findIntersections
-     * @return list of GeoPoint that intersect the set of Geometries
-     */
     @Override
-    public List<GeoPoint> findIntersections(Ray ray, double maxDistance) {
+    public List<GeoPoint> findGeoIntersections(Ray ray) {
         List<GeoPoint> intersections = null;
-
-        for (Intersectable geo : _geometries) {
-            List<GeoPoint> tempIntersections = geo.findIntersections(ray, maxDistance);
+        for (Intersectable geometry : _geometries) {
+            List<GeoPoint> tempIntersections = geometry.findGeoIntersections(ray);
             if (tempIntersections != null) {
                 if (intersections == null)
                     intersections = new LinkedList<>();
@@ -72,17 +42,5 @@ public class Geometries implements Intersectable {
             }
         }
         return intersections;
-
-    }
-
-    /**
-     * func to add Geometries to are List
-     *
-     * @param geometries get different type of Geometries
-     */
-    public void remove(Intersectable... geometries) {
-        for (Intersectable geo : geometries) {
-            _geometries.remove(geo);
-        }
     }
 }

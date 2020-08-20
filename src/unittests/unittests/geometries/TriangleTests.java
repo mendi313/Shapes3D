@@ -3,54 +3,65 @@ package unittests.geometries;
 import org.junit.Test;
 import geometries.*;
 import primitives.*;
-
 import java.util.List;
-
 import static org.junit.Assert.*;
 
 /**
  * Testing triangle
  */
-public class TriangleTests extends Object {
+public class TriangleTests {
+
+    /**
+     * Test method for {@link geometries.Polygon#getNormal(primitives.Point3D)}.
+     */
+    @Test
+    public void testGetNormal() {
+        // ============ Equivalence Partitions Tests ==============
+        // TC01: There is a simple single test here
+        Triangle pl = new Triangle(new Point3D(0, 0, 1), new Point3D(1, 0, 0), new Point3D(0, 1, 0));
+        double sqrt3 = Math.sqrt(1d / 3);
+        assertEquals("Bad normal to trinagle", new Vector(sqrt3, sqrt3, sqrt3), pl.getNormal(new Point3D(0, 0, 1)));
+    }
+
     /**
      * Test method for
-     * {@link geometries.Triangle #triangle(primitives.Point3D)}.
+     * {@link geometries.Triangle#findIntersections(primitives.Ray)}.
      */
-
-    // ============ Equivalence Partitions Tests ==============
     @Test
-    public void getNormal() {
-        Triangle triangle = new Triangle(new Point3D(-1, 0, 0), new Point3D(1, 0, 0), new Point3D(0, 0, 1));
-        Vector vector = new Vector(0, -1, 0).normalize();
-        assertEquals(vector, triangle.getNormal(new Point3D(-1, 0, 0)));
-        assertEquals(vector, triangle.getNormal(new Point3D(0, 0, 0)));
-        assertEquals(vector, triangle.getNormal(new Point3D(0.5, 0, 0)));
-    }
+    public void testFindIntersectionsRay() {
+        Triangle tr = new Triangle(new Point3D(0, 0, 1), new Point3D(1, 0, 0), new Point3D(0, 1, 0));
+        Plane pl = new Plane(new Point3D(0, 0, 1), new Point3D(1, 0, 0), new Point3D(0, 1, 0));
+        Ray ray;
+        // ============ Equivalence Partitions Tests ==============
+        // TC01: Inside triangle
+        ray = new Ray(new Point3D(1, 1, 1), new Vector(-1, -1, -1));
+        assertEquals("Bad intersection", List.of(new Point3D(1d / 3, 1d / 3, 1d / 3)), tr.findIntersections(ray));
 
-    @Test
-    public void findIntersectionsTest() {
-        Triangle triangle = new Triangle(new Point3D(0, 0, 0),
-                new Point3D(1, 2, 0),
-                new Point3D(2, 0, 0));
-        //===========================================================//
-        //===================EP: Three cases:=======================//
-        // TC01: Inside triangle (1 point)
-        primitives.Ray TC01 = new primitives.Ray(new primitives.Point3D(1.0, 1.0, -1.0), new primitives.Vector(0.0, 0.0, 1.0));
-        List<Intersectable.GeoPoint> resultTC01 = triangle.findIntersections(TC01);
+        // TC02: Against edge
+        ray = new Ray(new Point3D(0, 0, -1), new Vector(1, 1, 0));
+        assertEquals("Wrong intersection with plane", List.of(new Point3D(1, 1, -1)), pl.findIntersections(ray));
+        assertNull("Bad intersection", tr.findIntersections(ray));
 
-        assertEquals("Wrong number of points", 1, resultTC01.size());
+        // TC03: Against vertex
+        ray = new Ray(new Point3D(0, 0, 2), new Vector(-1, -1, 0));
+        assertEquals("Wrong intersection with plane", List.of(new Point3D(-0.5, -0.5, 2)), pl.findIntersections(ray));
+        assertNull("Bad intersection", tr.findIntersections(ray));
 
-        assertEquals("Ray crosses Triangle", java.util.List.of(new primitives.Point3D(1, 1, 0)), resultTC01);
-        // TC021:  Outside against edge (0 point)
-        primitives.Ray TC021 = new primitives.Ray(new primitives.Point3D(2.0, 1.0, -1.0), new primitives.Vector(0.0, 0.0, 1.0));
-        List<Intersectable.GeoPoint> resultTC021 = triangle.findIntersections(TC021);
+        // =============== Boundary Values Tests ==================
+        // TC11: In vertex
+        ray = new Ray(new Point3D(-1, 0, 0), new Vector(1, 1, 0));
+        assertEquals("Wrong intersection with plane", List.of(new Point3D(0, 1, 0)), pl.findIntersections(ray));
+        assertNull("Bad intersection", tr.findIntersections(ray));
 
-        assertEquals("Wrong number of points", null, resultTC021);
+        // TC12: On edge
+        ray = new Ray(new Point3D(-1, -1, 0), new Vector(1, 1, 0));
+        assertEquals("Wrong intersection with plane", List.of(new Point3D(0.5, 0.5, 0)), pl.findIntersections(ray));
+        assertNull("Bad intersection", tr.findIntersections(ray));
 
-        // TC022: Outside against vertex (0 points)
-        primitives.Ray TC022 = new primitives.Ray(new primitives.Point3D(2.0, -0.5, -1.0), new primitives.Vector(0.0, 0.0, 1.0));
-        java.util. List<Intersectable.GeoPoint> resultTC022 = triangle.findIntersections(TC022);
-
-        assertEquals("Wrong number of points", null, resultTC022);
+        // TC13: On edge continuation
+        ray = new Ray(new Point3D(-2, 0, 0), new Vector(1, 1, 0));
+        assertEquals("Wrong intersection with plane", List.of(new Point3D(-0.5, 1.5, 0)), pl.findIntersections(ray));
+        assertNull("Bad intersection", tr.findIntersections(ray));
     }
 }
+

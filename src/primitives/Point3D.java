@@ -1,150 +1,140 @@
 package primitives;
 
-import java.math.*;
-import java.util.Objects;
-
 /**
- * Point3D: class for representing a point in 3D environment
+ * Class Point3D is the basic class representing a point of Euclidean geometry
+ * in Cartesian 3-Dimensional coordinate system.
  */
 public class Point3D {
-    private Coordinate x, y, z;
-    public static final Point3D ZERO = new Point3D(0.0, 0.0, 0.0);
-
-    /***************contractors***********/
+    /**
+     * x coordinate, intentionally "package-friendly"
+     */
+    final Coordinate _x;
+    /**
+     * y coordinate, intentionally "package-friendly"
+     */
+    final Coordinate _y;
+    /**
+     * z coordinate, intentionally "package-friendly"
+     */
+    final Coordinate _z;
 
     /**
-     * contractor for creating a point
-     *
-     * @param _x get x for the contractor
-     * @param _y get y for the contractor
-     * @param _z get z for the contractor
+     * Point3D.ZERO - reference point of coordinate system (0,0,0)
      */
-    public Point3D(Coordinate _x, Coordinate _y, Coordinate _z) {
-        this.x = _x;
-        this.y = _y;
-        this.z = _z;
+    public static Point3D ZERO = new Point3D(0.0, 0.0, 0.0);
+
+    /**
+     * 3D point constructor by x, y and z coordinate values
+     *
+     * @param x - coordinate value
+     * @param y - coordinate value
+     * @param z - coordinate value
+     */
+    public Point3D(double x, double y, double z) {
+        _x = new Coordinate(x);
+        _y = new Coordinate(y);
+        _z = new Coordinate(z);
     }
 
     /**
-     * contractor double param
+     * Constructor for creating a copy of a given point
      *
-     * @param _x get x for the contractor
-     * @param _y get y for the contractor
-     * @param _z get z for the contractor
-     */
-    public Point3D(double _x, double _y, double _z) {
-        this(new Coordinate(_x), new Coordinate(_y), new Coordinate(_z));
-    }
-
-    /**
-     * contractor copy point
-     *
-     * @param other get point3D for the contractor
+     * @param other point instance to copy from
      */
     public Point3D(Point3D other) {
-        this.x = new Coordinate(other.x);
-        this.y = new Coordinate(other.y);
-        this.z = new Coordinate(other.z);
-
-    }
-    /****************getters*************/
-
-    /**
-     * getter for x
-     *
-     * @return x
-     */
-    public Coordinate getX() {
-        return new Coordinate(x);
+        _x = new Coordinate(other._x);
+        _y = new Coordinate(other._y);
+        _z = new Coordinate(other._z);
     }
 
     /**
-     * getter for y
+     * x coordinate value getter
      *
-     * @return y
+     * @return value of the coordinate
      */
-    public Coordinate getY() {
-        return new Coordinate(y);
+    public double getX() {
+        return _x._coord;
     }
 
     /**
-     * getter for z
+     * y coordinate value getter
      *
-     * @return z
+     * @return value of the coordinate
      */
-    public Coordinate getZ() {
-        return new Coordinate(z);
+    public double getY() {
+        return _y._coord;
     }
 
     /**
-     * calculate vector between point to point
+     * z coordinate value getter
      *
-     * @param v get Vector for the subtract
-     * @return Point3D
+     * @return value of the coordinate
      */
-    public Point3D subtract(Vector v) {
-        return new Point3D(this.x._coord - v.getHead().x._coord,
-                this.y._coord - v.getHead().y._coord,
-                this.z._coord - v.getHead().z._coord);
+    public double getZ() {
+        return _z._coord;
     }
 
-    /**
-     * calculate vector between point to point
-     *
-     * @param other get point3D for the subtract
-     * @return Vector
-     */
-    public Vector subtract(Point3D other) {
-        return new Vector(x.get() - other.getX().get(), y.get() - other.getY().get(), z.get() - other.getZ().get());
-    }
-
-    /**
-     * adding vector to point
-     *
-     * @param other get point3D for the adding
-     * @return Point3D
-     */
-    public Point3D add(Vector other) {
-        Point3D temp = other.getHead();
-        return new Point3D(x.get() + temp.getX().get(), y.get() + temp.getY().get(), z.get() + temp.getZ().get());
-    }
-
-    /**
-     * calculate squared distance between points
-     *
-     * @param other get point3D for the calculate distanceSquared
-     * @return double
-     */
-    public double distanceSquared(Point3D other) {
-        double _x = other.getX().get() - x.get();
-        double _y = other.getY().get() - y.get();
-        double _z = other.getZ().get() - z.get();
-        return _x * _x + _y * _y + _z * _z;
-    }
-
-    /**
-     * calculate distance between points
-     *
-     * @param other get point3D for the calculate distance
-     * @return double
-     */
-    public double distance(Point3D other) {
-        return Math.sqrt(distanceSquared(other));
-    }
-
-    /************toString() and equals() ****/
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Point3D point3D = (Point3D) o;
-        return x.equals(point3D.x) &&
-                y.equals(point3D.y) &&
-                z.equals(point3D.z);
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (!(obj instanceof Point3D))
+            return false;
+        Point3D oth = (Point3D) obj;
+        return _x.equals(oth._x) && _y.equals(oth._y) && _z.equals(oth._z);
     }
 
     @Override
     public String toString() {
-        return "(" + x + "," + y + "," + z + ")/n";
+        return "(" + _x + "," + _y + "," + _z + ")";
+    }
+
+    /**
+     * Adds a given vector v&#x20D7; to this point (P&#x2081;) resulting in a new point
+     * @param v vector to be added
+     * @return new point P&#x2081;+v&#x20D7;
+     */
+    public Point3D add(Vector v) {
+        Point3D other = v.getHead();
+        return new Point3D(_x._coord + other._x._coord, //
+                _y._coord + other._y._coord, //
+                _z._coord + other._z._coord);
+    }
+
+    /**
+     * Subtracts a point (P&#x2082;) from this point (P&#x2081;) resulting in a
+     * vector from a given point to this point
+     * @param other point to be subtracted (P&#x2082;)
+     * @return the result vector of P&#x2081;-P&#x2082;
+     */
+    public Vector subtract(Point3D other) {
+        return new Vector(_x._coord - other._x._coord, //
+                _y._coord - other._y._coord, //
+                _z._coord - other._z._coord);
+    }
+
+    /**
+     * Calculates squared distance between this point (P&#x2081;) and
+     * another point (P&#x2082;)
+     * @param other point
+     * @return |P&#x2081;P&#x2082;|&#xB2;
+     */
+    public double distanceSquared(Point3D other) {
+        double dx = _x._coord - other._x._coord;
+        double dy = _y._coord - other._y._coord;
+        double dz = _z._coord - other._z._coord;
+        return dx * dx + dy * dy + dz * dz;
+    }
+
+    /**
+     * Calculates distance between this point (P&#x2081;) and
+     * another point (P&#x2082;)
+     * @param other point
+     * @return |P&#x2081;P&#x2082;|
+     */
+    public double distance(Point3D other) {
+        return Math.sqrt(distanceSquared(other));
     }
 }

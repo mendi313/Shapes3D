@@ -5,53 +5,53 @@ import org.junit.Test;
 import primitives.Point3D;
 import primitives.Ray;
 import primitives.Vector;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
 
+/**
+ * Testing Geometries class is here
+ */
 public class GeometriesTest {
 
+    /**
+     * Test method for {@link geometries.Geometries#findIntersections(primitives.Ray)}.
+     */
     @Test
-    public void findIntersections() {
-        // =============== Boundary Values Tests ==================
-        // TC01: empty collection (0 elements)
-        Geometries geometries = new Geometries();
-        Ray ray = new Ray(new Point3D(1, 0, 0), new Vector(0, 1, 0));
-
-        assertNull("empty collection", geometries.findIntersections(ray));
-
-        // TC02: no geometry is intersect (0 elements)
-        ArrayList<Intersectable> intersectables = new ArrayList<>();
-        intersectables.add(new Sphere(1d, new Point3D(3, 2, 0)));
-        intersectables.add(new Cylinder(1d,
-                new Ray(new Point3D(-2, 2, -1), new Vector(0, 0, 1)), 4d));
-        geometries = new Geometries(intersectables);
-        assertNull("no intersection points", geometries.findIntersections(ray));
-
-        // TC03: one geometry is intersect (2 points)
-        geometries.add(new Sphere(1d, new Point3D(1.5, 2, 0)));
-
-        assertEquals("Wrong number of elements", 2, (geometries.findIntersections(ray)).size());
-
-        // TC04: all geometries is intersected (3 points)
-        intersectables = new ArrayList<Intersectable>(List.of(new Sphere(1d, new Point3D(1.5, 2, 0)),
-                new Cylinder(1d,
-                        new Ray(new Point3D(-2, 2, -1),
-                                new Vector(0, 0, 1)), 4d),
-                new Triangle(new Point3D(0, 6, -1),
-                        new Point3D(2, 6, -1),
-                        new Point3D(1, 6, 2))));
-        geometries = new Geometries(intersectables);
-
-        assertEquals("Wrong number of points", 3, (geometries.findIntersections(ray)).size());
+    public void testFindIntersectionsRay() {
+        List<Intersectable.GeoPoint> result;
+        Geometries geos = new Geometries(
+                new Plane(new Point3D(2, 0, 0), new Vector(-1, 1, 0)),
+                new Sphere(2d, new Point3D(5,0,0)),
+                new Triangle(new Point3D(8.5, -1, 0), new Point3D(7.5, 1.5, 1), new Point3D(7.5, 1.5, -1))
+        );
 
         // ============ Equivalence Partitions Tests ==============
+        // TC01: Some geo intersect
+        result = geos.findGeoIntersections(new Ray(new Point3D(1, 0, 0), new Vector(7, 3, 0)));
+        assertNotNull("It is empty!", result);
+        assertEquals("Bad intersects", 3, result.size());
 
-        // TC11: Some but not all geometries is intersected (5 points)
-        geometries.add(new Sphere(1d, new Point3D(3, 2, 0)));
+        // =============== Boundary Values Tests ==================
+        // TC11: Empty collection
+        result = new Geometries().findGeoIntersections(new Ray(new Point3D(1, 0, 0), new Vector(1, 0, 0)));
+        assertNull("It is not empty!", result);
 
-        assertEquals("Wrong number of points", 3, (geometries.findIntersections(ray)).size());
+        // TC12: None geo intersect
+        result = geos.findGeoIntersections(new Ray(new Point3D(1, 0, 0), new Vector(1, 3, 0)));
+        assertNull("Bad intersects", result);
+
+        // TC13: Single geo intersect
+        result = geos.findGeoIntersections(new Ray(new Point3D(1, 0, 0), new Vector(4, 3, 0)));
+        assertNotNull("It is empty!", result);
+        assertEquals("Bad intersects", 1, result.size());
+
+        // TC14: All geo intersect
+        result = geos.findGeoIntersections(new Ray(new Point3D(1, 0, 0), new Vector(7, 1, 0)));
+        assertNotNull("It is empty!", result);
+        assertEquals("Bad intersects", 4, result.size());
+
     }
+
 }
+
